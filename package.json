@@ -1,0 +1,44 @@
+{
+  "name": "ds-docs-theme",
+  "version": "0.1.0",
+  "description": "Theme genérico para documentar sistemas de diseño: layout, componentes, estilos y vistas de foundations, componentes y patrones. Cada proyecto lo carga con su propia data.",
+  "private": true,
+  "type": "module",
+  "files": ["src"],
+  "exports": {
+    "./theme.css": "./src/styles/theme.css",
+    "./types": "./src/types.ts",
+    "./ui/*": "./src/ui/*.tsx",
+    "./docs/*": "./src/docs/*.tsx",
+    "./lib/tokens": "./src/lib/tokens.ts",
+    "./lib/previews": "./src/lib/previews.ts",
+    "./lib/search": "./src/lib/search.ts",
+    "./lib/utils": "./src/lib/utils.ts"
+  },
+  "peerDependencies": {
+    "next": ">=16",
+    "react": ">=19",
+    "react-dom": ">=19",
+    "tailwindcss": "^4"
+  },
+  "dependencies": {
+    "@base-ui/react": "^1.9.0",
+    "class-variance-authority": "^0.7.1",
+    "cmdk": "^1.1.1",
+    "cn": "^0.5.2",
+    "lucide-react": "^1.70.0",
+    "next-themes": "^0.4.6",
+    "shadcn": "^4.23.0",
+    "sonner": "^2.0.8",
+    "tw-animate-css": "^1.4.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "next": "16.4.5",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "typescript": "^5"
+  }
+}
