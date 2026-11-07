@@ -43,11 +43,11 @@ export function PageHeader({ title, description, links }: { title: string; descr
   )
 }
 
-export function Section({ title, intro, children }: { title: string; intro?: string; children: React.ReactNode }) {
+export function Section({ title, intro, children }: { title: string; intro?: React.ReactNode; children: React.ReactNode }) {
   return (
     <section className="mb-14 space-y-3">
       <h2 className="text-xl font-semibold">{title}</h2>
-      {intro && <p className="max-w-2xl text-sm text-muted-foreground">{intro}</p>}
+      {intro && <div className="max-w-2xl text-sm text-muted-foreground">{intro}</div>}
       {children}
     </section>
   )

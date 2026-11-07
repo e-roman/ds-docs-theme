@@ -9,6 +9,32 @@ import type { Token } from "../types"
 export type FoundationOptions = {
   /** Grupos de color semántico cuando se nombran `color-<grupo>-…` (surface, text, action…). Sin esto se usa `color-semantic-<grupo>-…`. */
   semanticColorGroups?: string[]
+  /** Páginas definidas por el proyecto, por slug (reemplazan a la vista que trae el theme). */
+  pages?: Record<string, FoundationSection[]>
+}
+
+/** Tipo de muestra de una sección de tokens. */
+export type FoundationSample = "color" | "space" | "radius" | "shadow" | "border" | "opacity" | "duration" | "easing" | "font-family" | "font-weight" | "font-size" | "typography" | "none"
+
+/**
+ * Una sección de una página de foundations, definida por el proyecto:
+ * - con `prefixes`: tabla de los tokens que empiezan con esos prefijos, con la muestra que corresponda;
+ * - con `content`: contenido libre (texto, tablas, código);
+ * - con `families: true`: cuántos tokens hay en cada familia.
+ */
+export type FoundationSection = {
+  title: string
+  intro?: React.ReactNode
+  /** Prefijos de tokens: se listan en una tabla, en este orden. */
+  prefixes?: string[]
+  /** Nombres de token que no se muestran. */
+  hide?: string[]
+  /** Muestra de cada fila (por defecto, ninguna). */
+  sample?: FoundationSample
+  /** Contenido libre. Si existe, tiene prioridad sobre `prefixes`. */
+  content?: React.ReactNode
+  /** Tabla con la cantidad de tokens de cada familia. */
+  families?: boolean
 }
 
 type V = { tokens: Token[]; options?: FoundationOptions }
@@ -17,27 +43,29 @@ type V = { tokens: Token[]; options?: FoundationOptions }
 const Swatch = ({ color }: { color: string }) => <span className="inline-block size-8 shrink-0 rounded-md border" style={{ background: color }} />
 
 /** Tabla genérica: muestra, nombre del token (copiable), valor resuelto y a qué apunta. */
-export function TokenTable({ tokens, prefix, sample }: { tokens: Token[]; prefix?: string; sample?: (t: Token) => React.ReactNode }) {
+export function TokenTable({ tokens, prefix, sample, wide }: { tokens: Token[]; prefix?: string; sample?: (t: Token) => React.ReactNode; /** Muestra ancha: las columnas se reparten solas en vez de tener ancho fijo. */ wide?: boolean }) {
   // si los tokens traen descripción se muestra «Uso»; si no, a qué token apuntan («Referencia»)
   const hasDesc = tokens.some((t) => t.desc)
+  // la última columna solo aparece si hay algo que decir: una descripción o un alias (valor distinto del resuelto)
+  const hasLast = hasDesc || tokens.some((t) => t.value !== t.resolved)
   // anchos fijos: las columnas coinciden de una tabla a otra (el texto largo de «Uso» baja de línea)
   return (
-    <Table className="table-fixed">
+    <Table className={wide ? "" : "table-fixed"}>
       <TableHeader>
         <TableRow>
-          {sample && <TableHead className="w-24">Muestra</TableHead>}
-          <TableHead className={sample ? "w-[36%]" : "w-[40%]"}>Token</TableHead>
-          <TableHead className={sample ? "w-[18%]" : "w-[20%]"}>Valor</TableHead>
-          <TableHead className="hidden sm:table-cell">{hasDesc ? "Uso" : "Referencia"}</TableHead>
+          {sample && <TableHead className={wide ? "" : "w-24"}>Muestra</TableHead>}
+          <TableHead className={wide ? "min-w-48" : sample ? "w-[36%]" : "w-[40%]"}>Token</TableHead>
+          <TableHead className={wide ? "min-w-36" : sample ? "w-[18%]" : "w-[20%]"}>Valor</TableHead>
+          {hasLast && <TableHead className="hidden sm:table-cell">{hasDesc ? "Uso" : "Referencia"}</TableHead>}
         </TableRow>
       </TableHeader>
       <TableBody>
         {tokens.map((t) => (
           <TableRow key={t.name}>
-            {sample && <TableCell>{sample(t)}</TableCell>}
+            {sample && <TableCell className="whitespace-normal!">{sample(t)}</TableCell>}
             <TableCell className="whitespace-normal!"><CopyToken name={t.name} label={prefix ? `--${prefix}${rest(t, prefix)}` : undefined} /></TableCell>
             <TableCell className="font-mono text-xs whitespace-normal! break-all">{t.resolved}</TableCell>
-            <TableCell className="hidden font-mono text-xs text-muted-foreground whitespace-normal! sm:table-cell">{hasDesc ? (t.desc ?? "") : t.value !== t.resolved ? t.value : "—"}</TableCell>
+            {hasLast && (<TableCell className="hidden font-mono text-xs text-muted-foreground whitespace-normal! sm:table-cell">{hasDesc ? (t.desc ?? "") : t.value !== t.resolved ? t.value : "—"}</TableCell>)}
           </TableRow>
         ))}
       </TableBody>
@@ -142,7 +170,7 @@ function TypographyView({ tokens }: V) {
 function SpacingView({ tokens }: V) {
   return (
     <Section title="Escala" intro="Base 4: cada paso es múltiplo de 4 px.">
-      <TokenTable tokens={withPrefix(tokens, "spacing-")} sample={(t) => <span className="block h-3 rounded-sm bg-primary" style={{ width: t.resolved }} />} />
+      <TokenTable wide tokens={withPrefix(tokens, "spacing-")} sample={(t) => <span className="block h-3 rounded-sm bg-primary" style={{ width: t.resolved }} />} />
     </Section>
   )
 }
@@ -193,10 +221,10 @@ function MotionView({ tokens }: V) {
   return (
     <>
       <Section title="Duración" intro="Cuánto tarda una transición. Pasá el mouse por la muestra para verla.">
-        <TokenTable tokens={withPrefix(tokens, "duration-")} sample={(t) => <MotionBar duration={t.resolved} />} />
+        <TokenTable wide tokens={withPrefix(tokens, "duration-")} sample={(t) => <MotionBar duration={t.resolved} />} />
       </Section>
       <Section title="Curvas" intro="Cómo acelera y frena una transición. «standard» sirve para casi todo; «out» para lo que entra en pantalla.">
-        <TokenTable tokens={withPrefix(tokens, "easing-")} sample={(t) => <MotionBar easing={t.resolved} />} />
+        <TokenTable wide tokens={withPrefix(tokens, "easing-")} sample={(t) => <MotionBar easing={t.resolved} />} />
       </Section>
     </>
   )
@@ -210,12 +238,54 @@ function SizeView({ tokens }: V) {
   )
 }
 
+/** Muestra de cada tipo y si necesita una columna ancha. */
+const SAMPLES: Record<Exclude<FoundationSample, "none">, { render: (t: Token) => React.ReactNode; wide?: boolean }> = {
+  color: { render: (t) => <Swatch color={t.resolved} /> },
+  space: { wide: true, render: (t) => <span className="block h-3 rounded-sm bg-primary" style={{ width: t.resolved }} /> },
+  radius: { render: (t) => <span className="block size-10 border-2 border-primary bg-primary/10" style={{ borderRadius: t.resolved === "0" ? 0 : t.resolved }} /> },
+  shadow: { render: (t) => <span className="block size-10 rounded-md bg-background" style={{ boxShadow: t.resolved }} /> },
+  border: { render: (t) => <span className="block w-16 border-foreground" style={{ borderTopWidth: t.resolved, borderTopStyle: "solid" }} /> },
+  opacity: { render: (t) => <span className="block size-10 rounded-md bg-primary" style={{ opacity: Number(t.resolved) }} /> },
+  duration: { wide: true, render: (t) => <MotionBar duration={t.resolved} /> },
+  easing: { wide: true, render: (t) => <MotionBar easing={t.resolved} /> },
+  "font-family": { render: (t) => <span className="text-xl" style={{ fontFamily: t.resolved }}>Aa</span> },
+  "font-weight": { render: (t) => <span className="text-lg" style={{ fontWeight: Number(t.resolved) }}>Aa</span> },
+  "font-size": { render: (t) => <span style={{ fontSize: t.resolved, lineHeight: 1.1 }}>Aa</span> },
+  typography: { wide: true, render: (t) => <span className="block max-w-sm" style={{ font: t.resolved }}>La calidad que vos te merecés</span> },
+}
+
+/** Página de foundations armada con las secciones que define el proyecto. */
+function SectionsView({ sections, tokens }: { sections: FoundationSection[]; tokens: Token[] }) {
+  return (
+    <>
+      {sections.map((sec) => (
+        <Section key={sec.title} title={sec.title} intro={sec.intro}>
+          {sec.content ? sec.content : sec.families ? (
+            <Table>
+              <TableHeader><TableRow><TableHead>Familia</TableHead><TableHead>Tokens</TableHead></TableRow></TableHeader>
+              <TableBody>{countsByFamily(tokens).map(([f, n]) => <TableRow key={f}><TableCell className="font-mono text-xs">{f}-*</TableCell><TableCell>{n}</TableCell></TableRow>)}</TableBody>
+            </Table>
+          ) : (
+            (() => {
+              const list = (sec.prefixes ?? []).flatMap((p) => withPrefix(tokens, p)).filter((t) => !sec.hide?.includes(t.name))
+              const sm = sec.sample && sec.sample !== "none" ? SAMPLES[sec.sample] : undefined
+              return <TokenTable tokens={list} sample={sm?.render} wide={sm?.wide} />
+            })()
+          )}
+        </Section>
+      ))}
+    </>
+  )
+}
+
 const VIEWS: Record<string, (p: V) => React.JSX.Element> = {
   tokens: TokensView, color: ColorView, typography: TypographyView, spacing: SpacingView,
   radius: RadiusView, shadow: ShadowView, border: BorderView, opacity: OpacityView, motion: MotionView, size: SizeView,
 }
 
 export const FoundationView = ({ slug, tokens, options }: { slug: string; tokens: Token[]; options?: FoundationOptions }) => {
+  const custom = options?.pages?.[slug]
+  if (custom) return <SectionsView sections={custom} tokens={tokens} />
   const View = VIEWS[slug]
   return View ? <View tokens={tokens} options={options} /> : null
 }
