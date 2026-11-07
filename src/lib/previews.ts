@@ -21,7 +21,7 @@ export function inlinePreviews(o: { repo: string; sourceUrl?: (file: string) => 
     mode: "inline",
     liveUrl: () => "",
     storyUrl: o.storyUrl ?? (() => ""),
-    docsUrl: o.docsUrl ?? (() => o.repo),
+    docsUrl: o.docsUrl ?? (() => ""),
     sourceUrl: o.sourceUrl ?? ((file) => `${o.repo}/blob/main/${file}`),
   }
 }

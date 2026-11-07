@@ -12,15 +12,15 @@ const cache = new Map<string, Token[]>()
 export function readTokens(cssFile: string): Token[] {
   const hit = cache.get(cssFile)
   if (hit) return hit
-  const raw = new Map<string, string>()
+  const raw = new Map<string, { value: string; desc?: string }>()
   for (const line of fs.readFileSync(cssFile, "utf8").split("\n")) {
-    const m = line.match(/^\s*--([\w-]+):\s*(.+?);\s*$/)
+    const m = line.match(/^\s*--([\w-]+):\s*(.+?);\s*(?:\/\*\*\s*(.*?)\s*\*\/)?\s*$/)
     if (!m || m[1].endsWith("-rgb")) continue
-    raw.set(m[1], m[2])
+    raw.set(m[1], { value: m[2], desc: m[3] })
   }
   const resolve = (v: string, depth = 0): string =>
-    depth > 10 ? v : v.replace(/var\(--([\w-]+)\)/g, (_, n) => (raw.has(n) ? resolve(raw.get(n)!, depth + 1) : `var(--${n})`))
-  const all = [...raw].map(([name, value]) => ({ name, value, resolved: resolve(value) }))
+    depth > 10 ? v : v.replace(/var\(--([\w-]+)\)/g, (_, n) => (raw.has(n) ? resolve(raw.get(n)!.value, depth + 1) : `var(--${n})`))
+  const all = [...raw].map(([name, { value, desc }]) => ({ name, value, resolved: resolve(value), desc }))
   cache.set(cssFile, all)
   return all
 }
@@ -34,14 +34,22 @@ export const rest = (t: Token, prefix: string) => t.name.slice(prefix.length)
 /** Grupos semánticos de color (color-semantic-<grupo>-…). */
 export const SEMANTIC_GROUPS = ["surface", "text", "border", "icon", "feedback", "forms"]
 
-/** Escalas de color: primitivos agrupados por rampa (neutral, slate, rose…) y semánticos por grupo. */
-export function colorGroups(tokens: Token[]) {
+/**
+ * Escalas de color: primitivos agrupados por rampa (neutral, slate, rose…) y semánticos por grupo.
+ * Por defecto los semánticos son `color-semantic-<grupo>-…`. Si el proyecto los nombra `color-<grupo>-…` (surface, text, action…),
+ * pasa la lista de grupos en `semanticGroups`: lo que no esté en la lista se toma como escala primitiva.
+ */
+export function colorGroups(tokens: Token[], semanticGroups?: string[]) {
   const ramps = new Map<string, Token[]>()
   const brand: Token[] = []
   const semantic = new Map<string, Token[]>()
   for (const t of withPrefix(tokens, "color-")) {
     const parts = t.name.split("-")
-    if (parts[1] === "semantic") {
+    if (semanticGroups) {
+      const target = semanticGroups.includes(parts[1]) ? semantic : ramps
+      if (!target.has(parts[1])) target.set(parts[1], [])
+      target.get(parts[1])!.push(t)
+    } else if (parts[1] === "semantic") {
       const g = parts[2]
       if (!semantic.has(g)) semantic.set(g, [])
       semantic.get(g)!.push(t)

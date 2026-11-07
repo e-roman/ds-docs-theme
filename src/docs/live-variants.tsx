@@ -6,7 +6,7 @@ import { Button } from "../ui/button"
 import { Tabs, TabsList, TabsTrigger } from "../ui/tabs"
 import { FRAME_CSS, closeInspection, openInspection } from "./inspector"
 
-export type LiveItem = { label: string; id: string; /** Story embebida (mismo origen, vía /sb). */ src: string; /** Enlace a la story en Storybook. */ href: string; width?: number; /** Modo «inline»: el componente real se dibuja directo en la caja, sin iframe (el proyecto lo entrega ya armado). */ node?: ReactNode }
+export type LiveItem = { label: string; id: string; /** Story embebida (mismo origen, vía /sb). */ src: string; /** Enlace a la story en Storybook. */ href: string; width?: number; /** Texto bajo la vista. */ caption?: string; /** Fondo oscuro. */ dark?: boolean; /** Modo «inline»: el componente real se dibuja directo en la caja, sin iframe (el proyecto lo entrega ya armado). */ node?: ReactNode }
 
 type Channel = { emit: (event: string, ...args: unknown[]) => void; on: (event: string, fn: (...args: unknown[]) => void) => void; off: (event: string, fn: (...args: unknown[]) => void) => void }
 /** Canal interno de Storybook dentro del iframe: permite cambiar de story sin recargar la página. */
@@ -253,13 +253,13 @@ export function LiveVariants({ title, items }: { title: string; items: LiveItem[
             </Button>
           </div>
         </div>
-        <div className="bg-muted p-6">
+        <div className={`p-6 ${cur.dark ? "bg-neutral-800" : "bg-muted"}`}>
           {cur.node ? <InlineStage node={cur.node} inspecting={inspecting} /> : <LiveFrame item={cur} inspecting={inspecting} />}
         </div>
       </div>
       <div className="mt-2 flex items-start justify-between gap-4">
         <p className="text-xs text-muted-foreground">
-          {inspecting ? "Hacé clic en una parte del componente para ver sus propiedades y tokens." : cur.node ? "" : "Componente real de la tienda, publicado en Storybook."}
+          {inspecting ? "Hacé clic en una parte del componente para ver sus propiedades y tokens." : cur.caption ? cur.caption : cur.node ? "" : "Componente real de la tienda, publicado en Storybook."}
         </p>
         {!cur.node && (
           <a href={cur.href} target="_blank" rel="noopener noreferrer" className="inline-flex shrink-0 items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground">

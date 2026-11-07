@@ -5,13 +5,21 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from ".
 import { colorGroups, countsByFamily, rest, withPrefix } from "../lib/tokens"
 import type { Token } from "../types"
 
-type V = { tokens: Token[] }
+/** Ajustes por proyecto: cómo nombra sus tokens. */
+export type FoundationOptions = {
+  /** Grupos de color semántico cuando se nombran `color-<grupo>-…` (surface, text, action…). Sin esto se usa `color-semantic-<grupo>-…`. */
+  semanticColorGroups?: string[]
+}
+
+type V = { tokens: Token[]; options?: FoundationOptions }
 
 /** Cuadrito de color con borde, para que se vean también los blancos. */
 const Swatch = ({ color }: { color: string }) => <span className="inline-block size-8 shrink-0 rounded-md border" style={{ background: color }} />
 
 /** Tabla genérica: muestra, nombre del token (copiable), valor resuelto y a qué apunta. */
-function TokenTable({ tokens, prefix, sample }: { tokens: Token[]; prefix?: string; sample?: (t: Token) => React.ReactNode }) {
+export function TokenTable({ tokens, prefix, sample }: { tokens: Token[]; prefix?: string; sample?: (t: Token) => React.ReactNode }) {
+  // si los tokens traen descripción se muestra «Uso»; si no, a qué token apuntan («Referencia»)
+  const hasDesc = tokens.some((t) => t.desc)
   return (
     <Table>
       <TableHeader>
@@ -19,7 +27,7 @@ function TokenTable({ tokens, prefix, sample }: { tokens: Token[]; prefix?: stri
           {sample && <TableHead className="w-24">Muestra</TableHead>}
           <TableHead>Token</TableHead>
           <TableHead>Valor</TableHead>
-          <TableHead className="hidden sm:table-cell">Referencia</TableHead>
+          <TableHead className="hidden sm:table-cell">{hasDesc ? "Uso" : "Referencia"}</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -28,7 +36,7 @@ function TokenTable({ tokens, prefix, sample }: { tokens: Token[]; prefix?: stri
             {sample && <TableCell>{sample(t)}</TableCell>}
             <TableCell><CopyToken name={t.name} label={prefix ? `--${prefix}${rest(t, prefix)}` : undefined} /></TableCell>
             <TableCell className="font-mono text-xs">{t.resolved}</TableCell>
-            <TableCell className="hidden font-mono text-xs text-muted-foreground sm:table-cell">{t.value !== t.resolved ? t.value : "—"}</TableCell>
+            <TableCell className="hidden font-mono text-xs text-muted-foreground sm:table-cell">{hasDesc ? (t.desc ?? "") : t.value !== t.resolved ? t.value : "—"}</TableCell>
           </TableRow>
         ))}
       </TableBody>
@@ -62,36 +70,50 @@ function TokensView({ tokens }: V) {
   )
 }
 
-function ColorView({ tokens }: V) {
-  const { ramps, brand, semantic } = colorGroups(tokens)
+/** Una rampa de color: caja, paso y código debajo. */
+function Ramp({ name, tokens, prefix }: { name: string; tokens: Token[]; prefix: string }) {
+  return (
+    <div>
+      <h3 className="mb-3 text-sm font-semibold capitalize">{name.replace(/-/g, " ")}</h3>
+      {/* 11 columnas que reparten el 100% del ancho: las escalas completas llenan la fila */}
+      <div className="grid grid-cols-4 gap-x-2 gap-y-4 sm:grid-cols-6 lg:grid-cols-11">
+        {tokens.map((t) => (
+          <div key={t.name} className="min-w-0">
+            <span className="block h-16 rounded-lg border" style={{ background: t.resolved }} />
+            <b className="mt-2 block text-xs">{rest(t, prefix)}</b>
+            <code className="block break-all font-mono text-[11px] leading-tight text-muted-foreground">{t.resolved}</code>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function ColorView({ tokens, options }: V) {
+  const { ramps, brand, semantic } = colorGroups(tokens, options?.semanticColorGroups)
+  const custom = Boolean(options?.semanticColorGroups)
   return (
     <>
-      <Section title="Primitivos" intro="Neutral y la escala de marca van de 50 a 950; los colores de estado (verde, rojo, amarillo y azul de info) tienen seis pasos. Son la materia prima: solo las usa la capa semántica.">
-        <div className="space-y-6">
-          {[...ramps].map(([ramp, tokens]) => (
-            <div key={ramp}>
-              <p className="mb-2 text-sm font-medium capitalize">{ramp.replace("-", " ")}</p>
-              {/* 11 columnas que reparten el 100% del ancho: las escalas completas llenan la fila */}
-              <div className="grid grid-cols-6 gap-2 sm:grid-cols-11">
-                {tokens.map((t) => (
-                  <div key={t.name} className="text-center">
-                    <span className="block h-20 rounded-lg border" style={{ background: t.resolved }} />
-                    <span className="mt-1 block text-xs text-muted-foreground">{t.name.split("-").pop()}</span>
-                  </div>
-                ))}
-              </div>
+      <Section title="Primitivos" intro="Las escalas de la paleta. Son la materia prima: solo las usa la capa semántica.">
+        <div className="space-y-8">
+          {[...ramps].map(([ramp, list]) => <Ramp key={ramp} name={ramp} tokens={list} prefix={`color-${ramp}-`} />)}
+        </div>
+      </Section>
+      {brand.length > 0 && (
+        <Section title="Marca" intro="Alias de la escala de marca, más los estados por defecto, hover y sutil.">
+          <TokenTable tokens={brand} sample={(t) => <Swatch color={t.resolved} />} />
+        </Section>
+      )}
+      <Section title="Semánticos" intro="Colores con intención. Son los que usan los componentes. Hacé clic en un nombre para copiar la variable.">
+        <div className="space-y-8">
+          {[...semantic].map(([group, list]) => (
+            <div key={group} className="space-y-3">
+              <h3 className="text-sm font-semibold capitalize">{group}</h3>
+              <TokenTable tokens={list} prefix={custom ? `color-${group}-` : `color-semantic-${group}-`} sample={(t) => <Swatch color={t.resolved} />} />
             </div>
           ))}
         </div>
       </Section>
-      <Section title="Marca" intro="Alias de la escala azul de marca, más los estados por defecto, hover y sutil.">
-        <TokenTable tokens={brand} sample={(t) => <Swatch color={t.resolved} />} />
-      </Section>
-      {[...semantic].map(([group, tokens]) => (
-        <Section key={group} title={`Semánticos · ${group}`}>
-          <TokenTable tokens={tokens} prefix={`color-semantic-${group}-`} sample={(t) => <Swatch color={t.resolved} />} />
-        </Section>
-      ))}
     </>
   )
 }
@@ -192,7 +214,7 @@ const VIEWS: Record<string, (p: V) => React.JSX.Element> = {
   radius: RadiusView, shadow: ShadowView, border: BorderView, opacity: OpacityView, motion: MotionView, size: SizeView,
 }
 
-export const FoundationView = ({ slug, tokens }: { slug: string; tokens: Token[] }) => {
+export const FoundationView = ({ slug, tokens, options }: { slug: string; tokens: Token[]; options?: FoundationOptions }) => {
   const View = VIEWS[slug]
-  return View ? <View tokens={tokens} /> : null
+  return View ? <View tokens={tokens} options={options} /> : null
 }

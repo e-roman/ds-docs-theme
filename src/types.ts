@@ -8,6 +8,8 @@ export type Token = {
   value: string
   /** Valor final, resolviendo referencias. */
   resolved: string
+  /** Descripción del token (el comentario de su línea en el CSS), si la tiene. */
+  desc?: string
 }
 
 /** Entrada del menú lateral de una sección. */
@@ -22,7 +24,11 @@ export type AnatomyPart = { n: number; label: string; selector: string; note?: s
 /** Anatomía interactiva: una story de Storybook y sus partes. */
 export type Anatomy = { story: string; /** Ancho máximo del marco en px. */ width?: number; parts: AnatomyPart[]; /** Modo «inline»: el componente ya armado, sin iframe. Los `selector` de las partes se buscan dentro de él. */ node?: ReactNode }
 /** `width`: ancho máximo del marco en px; las stories mobile se muestran en un marco angosto. */
-export type Story = { label: string; id: string; width?: number; /** Modo «inline»: el componente ya armado, se dibuja sin iframe. */ node?: ReactNode }
+export type Story = { label: string; id: string; width?: number; /** Texto bajo la vista: cuándo usar esa variante. */ caption?: string; /** Fondo oscuro: para vistas pensadas para fotos o superficies oscuras. */ dark?: boolean; /** Modo «inline»: el componente ya armado, se dibuja sin iframe. */ node?: ReactNode }
+/** Vistas agrupadas por una propiedad (Variante, Tamaño, Estado…): cada grupo es un bloque con sus pestañas. */
+export type StoryGroup = { title: string; intro?: string; stories: Story[] }
+/** Un propósito de la pieza: título corto y una frase. */
+export type Purpose = { title: string; text: string }
 /** Cambio propio de la pieza. Lo que va entre `backticks` se muestra como código. */
 export type HistoryEntry = { date: string; text: string }
 /** Ejemplo «sí / no» con una vista previa (story en iframe o `node` en modo inline). */
@@ -42,6 +48,16 @@ export type Piece = {
   /** Alto del preview en px (por defecto 200). */
   previewHeight?: number
   stories: Story[]
+  /** Alternativa a `stories`: vistas agrupadas por propiedad. Si existe, tiene prioridad. */
+  groups?: StoryGroup[]
+  /** Para qué sirve la pieza (sección «Propósito», antes de la anatomía). */
+  purpose?: Purpose[]
+  /** Prefijos de tokens de la pieza (ej. `button-`): se listan en la sección «Tokens», leídos en vivo. */
+  tokenPrefixes?: string[]
+  /** Encabezado de la primera columna del historial (por defecto «Fecha»; puede ser «Versión de tokens»). */
+  historyColumn?: string
+  /** Texto corto para menús y tarjetas del índice; si falta se usa `description`. */
+  summary?: string
   /** Partes del componente, con un número cada una; abren el inspector (solo las que existen en el código). */
   anatomy?: Anatomy
   props: Prop[]

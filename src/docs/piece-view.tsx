@@ -2,10 +2,11 @@ import { DoDont, PageHeader, PropsTable, Section, WhenToUse } from "./blocks"
 import { DocTabs } from "./doc-tabs"
 import { AnatomyView } from "./anatomy-view"
 import { InspectDrawer } from "./inspector"
+import { TokenTable } from "./foundation-views"
 import { LiveVariants } from "./live-variants"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table"
 import { contrast } from "../lib/contrast"
-import { findToken } from "../lib/tokens"
+import { findToken, withPrefix } from "../lib/tokens"
 import type { ExternalLinks, Piece, PreviewAdapter, Token } from "../types"
 
 /** Texto con `código` entre backticks. */
@@ -30,24 +31,51 @@ export function PieceView({ piece, tokens, preview, links }: { piece: Piece; tok
   return (
     <article>
       <InspectDrawer />
-      <PageHeader title={piece.title} description={piece.description} links={{ github: preview.sourceUrl(piece.file), storybook: inline ? undefined : preview.docsUrl(piece.docsId), figma: links?.figma }} />
+      <PageHeader title={piece.title} description={piece.description} links={{ github: preview.sourceUrl(piece.file), storybook: preview.docsUrl(piece.docsId) || undefined, figma: links?.figma }} />
       <DocTabs
         panels={{
           design: (
             <>
+              {piece.purpose && piece.purpose.length > 0 && (
+                <Section title="Propósito">
+                  <div className="grid gap-4 sm:grid-cols-3">
+                    {piece.purpose.map((p) => (
+                      <div key={p.title} className="rounded-2xl bg-muted p-6">
+                        <h3 className="font-semibold">{p.title}</h3>
+                        <p className="mt-2 text-sm text-muted-foreground">{p.text}</p>
+                      </div>
+                    ))}
+                  </div>
+                </Section>
+              )}
               {piece.anatomy && (
                 <Section title="Anatomía" intro="Cada número es una parte del componente real: hacé clic para ver sus propiedades y tokens.">
                   <AnatomyView title={piece.title} src={preview.liveUrl(piece.anatomy.story)} node={piece.anatomy.node} anatomy={piece.anatomy} />
                 </Section>
               )}
-              <Section title="Variantes" intro={inline ? "El componente real, en vivo." : "El componente real, en vivo. Con «Inspeccionar» ves las propiedades y los tokens de cada parte."}>
-                {piece.stories.length === 0 ? (
+              <Section title={piece.groups?.length ? "Configuración" : "Variantes"} intro={inline ? "El componente real, en vivo." : "El componente real, en vivo. Con «Inspeccionar» ves las propiedades y los tokens de cada parte."}>
+                {piece.groups?.length ? (
+                  <div className="space-y-10">
+                    {piece.groups.map((g) => (
+                      <div key={g.title} className="space-y-3">
+                        <h3 className="text-base font-semibold">{g.title}</h3>
+                        {g.intro && <p className="max-w-2xl text-sm text-muted-foreground">{g.intro}</p>}
+                        <LiveVariants title={g.title} items={g.stories.map((s) => ({ label: s.label, id: s.id, src: preview.liveUrl(s.id), href: preview.storyUrl(s.id), width: s.width, node: s.node, caption: s.caption, dark: s.dark }))} />
+                      </div>
+                    ))}
+                  </div>
+                ) : piece.stories.length === 0 ? (
                   <p className="text-sm text-muted-foreground">Este componente no dibuja nada en pantalla, así que no tiene vista previa.{inline ? "" : " Podés probarlo en su story de Storybook."}</p>
                 ) : (
-                  <LiveVariants title={piece.title} items={piece.stories.map((s) => ({ label: s.label, id: s.id, src: preview.liveUrl(s.id), href: preview.storyUrl(s.id), width: s.width, node: s.node }))} />
+                  <LiveVariants title={piece.title} items={piece.stories.map((s) => ({ label: s.label, id: s.id, src: preview.liveUrl(s.id), href: preview.storyUrl(s.id), width: s.width, node: s.node, caption: s.caption, dark: s.dark }))} />
                 )}
               </Section>
               <Section title="Props"><PropsTable props={piece.props} /></Section>
+              {piece.tokenPrefixes && piece.tokenPrefixes.length > 0 && (
+                <Section title="Tokens" intro="Se leen en vivo del paquete de tokens.">
+                  {piece.tokenPrefixes.map((p) => <TokenTable key={p} tokens={withPrefix(tokens, p)} prefix={p} />)}
+                </Section>
+              )}
             </>
           ),
           usage: (
@@ -113,7 +141,7 @@ export function PieceView({ piece, tokens, preview, links }: { piece: Piece; tok
             <Section title="Cambios del componente">
               <Table>
                 <TableHeader>
-                  <TableRow><TableHead className="w-32">Fecha</TableHead><TableHead>Cambio</TableHead></TableRow>
+                  <TableRow><TableHead className="w-40">{piece.historyColumn ?? "Fecha"}</TableHead><TableHead>Cambio</TableHead></TableRow>
                 </TableHeader>
                 <TableBody>
                   {[...piece.history].sort((a, b) => b.date.localeCompare(a.date)).map((h) => (
