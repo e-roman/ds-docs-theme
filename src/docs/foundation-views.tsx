@@ -20,13 +20,14 @@ const Swatch = ({ color }: { color: string }) => <span className="inline-block s
 export function TokenTable({ tokens, prefix, sample }: { tokens: Token[]; prefix?: string; sample?: (t: Token) => React.ReactNode }) {
   // si los tokens traen descripción se muestra «Uso»; si no, a qué token apuntan («Referencia»)
   const hasDesc = tokens.some((t) => t.desc)
+  // anchos fijos: las columnas coinciden de una tabla a otra (el texto largo de «Uso» baja de línea)
   return (
-    <Table>
+    <Table className="table-fixed">
       <TableHeader>
         <TableRow>
           {sample && <TableHead className="w-24">Muestra</TableHead>}
-          <TableHead>Token</TableHead>
-          <TableHead>Valor</TableHead>
+          <TableHead className={sample ? "w-[36%]" : "w-[40%]"}>Token</TableHead>
+          <TableHead className={sample ? "w-[18%]" : "w-[20%]"}>Valor</TableHead>
           <TableHead className="hidden sm:table-cell">{hasDesc ? "Uso" : "Referencia"}</TableHead>
         </TableRow>
       </TableHeader>
@@ -34,9 +35,9 @@ export function TokenTable({ tokens, prefix, sample }: { tokens: Token[]; prefix
         {tokens.map((t) => (
           <TableRow key={t.name}>
             {sample && <TableCell>{sample(t)}</TableCell>}
-            <TableCell><CopyToken name={t.name} label={prefix ? `--${prefix}${rest(t, prefix)}` : undefined} /></TableCell>
-            <TableCell className="font-mono text-xs">{t.resolved}</TableCell>
-            <TableCell className="hidden font-mono text-xs text-muted-foreground sm:table-cell">{hasDesc ? (t.desc ?? "") : t.value !== t.resolved ? t.value : "—"}</TableCell>
+            <TableCell className="whitespace-normal!"><CopyToken name={t.name} label={prefix ? `--${prefix}${rest(t, prefix)}` : undefined} /></TableCell>
+            <TableCell className="font-mono text-xs whitespace-normal! break-all">{t.resolved}</TableCell>
+            <TableCell className="hidden font-mono text-xs text-muted-foreground whitespace-normal! sm:table-cell">{hasDesc ? (t.desc ?? "") : t.value !== t.resolved ? t.value : "—"}</TableCell>
           </TableRow>
         ))}
       </TableBody>
