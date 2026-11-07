@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState, type ReactNode } from "react"
 import { ExternalLink, Loader2, MousePointerClick } from "lucide-react"
 import { Button } from "../ui/button"
 import { Tabs, TabsList, TabsTrigger } from "../ui/tabs"
+import { fmt } from "./fmt"
 import { FRAME_CSS, closeInspection, openInspection } from "./inspector"
 
 export type LiveItem = { label: string; id: string; /** Story embebida (mismo origen, vía /sb). */ src: string; /** Enlace a la story en Storybook. */ href: string; width?: number; /** Texto bajo la vista. */ caption?: string; /** Fondo oscuro. */ dark?: boolean; /** Modo «inline»: el componente real se dibuja directo en la caja, sin iframe (el proyecto lo entrega ya armado). */ node?: ReactNode }
@@ -259,7 +260,7 @@ export function LiveVariants({ title, items }: { title: string; items: LiveItem[
       </div>
       <div className="mt-2 flex items-start justify-between gap-4">
         <p className="text-xs text-muted-foreground">
-          {inspecting ? "Hacé clic en una parte del componente para ver sus propiedades y tokens." : cur.caption ? cur.caption : cur.node ? "" : "Componente real de la tienda, publicado en Storybook."}
+          {inspecting ? "Hacé clic en una parte del componente para ver sus propiedades y tokens." : cur.caption ? fmt(cur.caption) : cur.node ? "" : "Componente real de la tienda, publicado en Storybook."}
         </p>
         {!cur.node && (
           <a href={cur.href} target="_blank" rel="noopener noreferrer" className="inline-flex shrink-0 items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground">

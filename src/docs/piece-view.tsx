@@ -2,6 +2,7 @@ import { DoDont, PageHeader, PropsTable, Section, WhenToUse } from "./blocks"
 import { DocTabs } from "./doc-tabs"
 import { AnatomyView } from "./anatomy-view"
 import { InspectDrawer } from "./inspector"
+import { fmt } from "./fmt"
 import { TokenTable } from "./foundation-views"
 import { LiveVariants } from "./live-variants"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table"
@@ -10,7 +11,6 @@ import { findToken, withPrefix } from "../lib/tokens"
 import type { ExternalLinks, Piece, PreviewAdapter, Token } from "../types"
 
 /** Texto con `código` entre backticks. */
-const fmt = (s: string) => s.split("`").map((p, i) => (i % 2 ? <code key={i} className="rounded bg-muted px-1.5 py-0.5 font-mono text-[0.85em]">{p}</code> : p))
 
 const Kbd = ({ children }: { children: string }) => <kbd className="rounded border border-b-2 bg-background px-1.5 py-0.5 font-mono text-xs font-semibold">{children}</kbd>
 
@@ -25,9 +25,13 @@ function Ratio({ tokens, fg, bg, min = 4.5 }: { tokens: Token[]; fg: string; bg:
 }
 
 /** Página de un componente o patrón, con las pestañas Diseño, Uso, Accesibilidad e Historial. */
+/** Secciones libres de una pestaña. */
+const extrasFor = (piece: Piece, tab: "design" | "usage" | "accessibility" | "updates") =>
+  (piece.extras ?? []).filter((e) => e.tab === tab).map((e) => <Section key={e.title} title={e.title}>{e.node}</Section>)
+
 export function PieceView({ piece, tokens, preview, links }: { piece: Piece; tokens: Token[]; preview: PreviewAdapter; /** Enlaces externos de la página; GitHub y Storybook de la pieza los pone el adaptador. */ links?: Pick<ExternalLinks, "figma"> }) {
   const inline = preview.mode === "inline"
-  const hasA11y = Boolean(piece.a11y?.length || piece.keyboard?.length || piece.contrast?.length)
+  const hasA11y = Boolean(piece.a11y?.length || piece.keyboard?.length || piece.contrast?.length || piece.extras?.some((e) => e.tab === "accessibility"))
   return (
     <article>
       <InspectDrawer />
@@ -59,7 +63,7 @@ export function PieceView({ piece, tokens, preview, links }: { piece: Piece; tok
                     {piece.groups.map((g) => (
                       <div key={g.title} className="space-y-3">
                         <h3 className="text-base font-semibold">{g.title}</h3>
-                        {g.intro && <p className="max-w-2xl text-sm text-muted-foreground">{g.intro}</p>}
+                        {g.intro && <p className="max-w-2xl text-sm text-muted-foreground">{fmt(g.intro)}</p>}
                         <LiveVariants title={g.title} items={g.stories.map((s) => ({ label: s.label, id: s.id, src: preview.liveUrl(s.id), href: preview.storyUrl(s.id), width: s.width, node: s.node, caption: s.caption, dark: s.dark }))} />
                       </div>
                     ))}
@@ -70,12 +74,18 @@ export function PieceView({ piece, tokens, preview, links }: { piece: Piece; tok
                   <LiveVariants title={piece.title} items={piece.stories.map((s) => ({ label: s.label, id: s.id, src: preview.liveUrl(s.id), href: preview.storyUrl(s.id), width: s.width, node: s.node, caption: s.caption, dark: s.dark }))} />
                 )}
               </Section>
-              <Section title="Props"><PropsTable props={piece.props} /></Section>
+              {!(piece.hideEmptyProps && piece.props.length === 0) && <Section title="Props"><PropsTable props={piece.props} /></Section>}
+              {piece.tokenNames && piece.tokenNames.length > 0 && (
+                <Section title="Tokens" intro="Los tokens globales que usa el CSS real del componente.">
+                  <TokenTable tokens={piece.tokenNames.map((n) => findToken(tokens, n)).filter((t): t is Token => Boolean(t))} />
+                </Section>
+              )}
               {piece.tokenPrefixes && piece.tokenPrefixes.length > 0 && (
                 <Section title="Tokens" intro="Se leen en vivo del paquete de tokens.">
                   {piece.tokenPrefixes.map((p) => <TokenTable key={p} tokens={withPrefix(tokens, p)} prefix={p} />)}
                 </Section>
               )}
+              {extrasFor(piece, "design")}
             </>
           ),
           usage: (
@@ -88,6 +98,7 @@ export function PieceView({ piece, tokens, preview, links }: { piece: Piece; tok
                   <DoDont items={piece.practices.map((p) => ({ ok: p.ok, title: p.title, text: p.text, storyId: p.storyId, src: preview.liveUrl(p.storyId), node: p.node }))} />
                 </Section>
               )}
+              {extrasFor(piece, "usage")}
             </>
           ),
           accessibility: hasA11y ? (
@@ -135,10 +146,12 @@ export function PieceView({ piece, tokens, preview, links }: { piece: Piece; tok
                   <p className="text-sm text-muted-foreground">Texto: 4.5:1 (WCAG 1.4.3). Los íconos son componentes gráficos: mínimo 3:1 (WCAG 1.4.11). Los pares salen de los tokens que aplica el CSS de la tienda.</p>
                 </Section>
               ) : null}
+              {extrasFor(piece, "accessibility")}
             </>
           ) : undefined,
-          updates: piece.history?.length ? (
-            <Section title="Cambios del componente">
+          updates: piece.history?.length || piece.extras?.some((e) => e.tab === "updates") ? (
+            <>
+            {piece.history?.length ? <Section title="Cambios del componente">
               <Table>
                 <TableHeader>
                   <TableRow><TableHead className="w-40">{piece.historyColumn ?? "Fecha"}</TableHead><TableHead>Cambio</TableHead></TableRow>
@@ -152,7 +165,9 @@ export function PieceView({ piece, tokens, preview, links }: { piece: Piece; tok
                   ))}
                 </TableBody>
               </Table>
-            </Section>
+            </Section> : null}
+            {extrasFor(piece, "updates")}
+            </>
           ) : undefined,
         }}
       />

@@ -50,6 +50,12 @@ export type Piece = {
   stories: Story[]
   /** Alternativa a `stories`: vistas agrupadas por propiedad. Si existe, tiene prioridad. */
   groups?: StoryGroup[]
+  /** No mostrar la sección «Props» cuando la pieza no tiene (por defecto se muestra con un aviso). */
+  hideEmptyProps?: boolean
+  /** Secciones libres (tablas, paneles, texto) que no encajan en los campos anteriores, por pestaña. */
+  extras?: { tab: "design" | "usage" | "accessibility" | "updates"; title: string; node: ReactNode }[]
+  /** Tokens de la pieza por nombre (sección «Tokens»), para piezas cuyos tokens no comparten prefijo. */
+  tokenNames?: string[]
   /** Para qué sirve la pieza (sección «Propósito», antes de la anatomía). */
   purpose?: Purpose[]
   /** Prefijos de tokens de la pieza (ej. `button-`): se listan en la sección «Tokens», leídos en vivo. */
