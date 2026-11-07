@@ -16,7 +16,8 @@
     "./lib/previews": "./src/lib/previews.ts",
     "./lib/search": "./src/lib/search.ts",
     "./lib/utils": "./src/lib/utils.ts",
-    "./lib/search-index": "./src/lib/search-index.ts"
+    "./lib/search-index": "./src/lib/search-index.ts",
+    "./lib/dom": "./src/lib/dom.ts"
   },
   "peerDependencies": {
     "next": ">=16",

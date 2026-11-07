@@ -29,6 +29,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   } as CSSProperties
   return (
     <html lang="es" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`} style={vars}>
+      <head>
+        {/* Tokens y fuentes de la tienda a nivel documento: las variables CSS y las @font-face sí atraviesan el shadow root */}
+        <link rel="stylesheet" href="/orali-tokens.css" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" />
+      </head>
       <body className="min-h-full">
         <TooltipProvider>
           <SiteHeader entries={searchIndex()} brand={brand} topNav={topNav} />

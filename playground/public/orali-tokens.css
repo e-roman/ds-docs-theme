@@ -1,0 +1,903 @@
+/**
+ * Do not edit directly, this file was auto-generated.
+ */
+
+:root {
+  --color-neutral-50: #fafafa;
+  --color-neutral-100: #f5f5f5;
+  --color-neutral-200: #e4e4e4;
+  --color-neutral-300: #d4d4d4;
+  --color-neutral-400: #8e8e8e; /** Gris más claro que llega a 3:1 sobre blanco, página y subtle (WCAG 1.4.11). Antes #A3A3A3 */
+  --color-neutral-500: #6b6b6b;
+  --color-neutral-600: #525252;
+  --color-neutral-700: #404040;
+  --color-neutral-800: #262626;
+  --color-neutral-900: #1a1a1a;
+  --color-neutral-950: #0a0a0a;
+  --color-tomato-50: #fff1f2;
+  --color-tomato-100: #ffe1e3;
+  --color-tomato-200: #ffc7ca;
+  --color-tomato-300: #ff9fa5;
+  --color-tomato-400: #ff6871;
+  --color-tomato-500: #e30613;
+  --color-tomato-600: #c20510;
+  --color-tomato-700: #9a040d;
+  --color-tomato-800: #85030d;
+  --color-tomato-900: #610209;
+  --color-tomato-950: #3d0106;
+  --color-sage-50: #effbf2;
+  --color-sage-100: #ddf6e3;
+  --color-sage-200: #bcecc8;
+  --color-sage-300: #8bdea1;
+  --color-sage-400: #4fcb70;
+  --color-sage-500: #1a9139;
+  --color-sage-600: #15803d;
+  --color-sage-700: #126528;
+  --color-sage-800: #0e4f20;
+  --color-sage-900: #0a3917;
+  --color-sage-950: #06240e;
+  --color-green-50: #f0fdf4;
+  --color-green-100: #dcfce7;
+  --color-green-200: #bbf7d0;
+  --color-green-300: #86efac;
+  --color-green-400: #4ade80;
+  --color-green-500: #22c55e;
+  --color-green-600: #16a34a;
+  --color-green-700: #15803d;
+  --color-green-800: #166534;
+  --color-green-900: #14532d;
+  --color-green-950: #052e16;
+  --color-yellow-50: #fefce8;
+  --color-yellow-100: #fef9c3;
+  --color-yellow-200: #fef08a;
+  --color-yellow-300: #fde047;
+  --color-yellow-400: #facc15;
+  --color-yellow-500: #eab308;
+  --color-yellow-600: #ca8a04;
+  --color-yellow-700: #a16207;
+  --color-yellow-800: #854d0e;
+  --color-yellow-900: #713f12;
+  --color-yellow-950: #422006;
+  --color-red-50: #fef2f2;
+  --color-red-100: #fee2e2;
+  --color-red-200: #fecaca;
+  --color-red-300: #fca5a5;
+  --color-red-400: #f87171;
+  --color-red-500: #ef4444;
+  --color-red-600: #dc2626;
+  --color-red-700: #b91c1c;
+  --color-red-800: #991b1b;
+  --color-red-900: #7f1d1d;
+  --color-red-950: #450a0a;
+  --color-blue-50: #eff6ff;
+  --color-blue-100: #dbeafe;
+  --color-blue-200: #bfdbfe;
+  --color-blue-300: #93c5fd;
+  --color-blue-400: #60a5fa;
+  --color-blue-500: #3b82f6;
+  --color-blue-600: #2563eb;
+  --color-blue-700: #1d4ed8;
+  --color-blue-800: #1e40af;
+  --color-blue-900: #1e3a8a;
+  --color-blue-950: #172554;
+  --color-base-white: #ffffff;
+  --color-base-black: #141414;
+  --color-base-transparent: rgba(255, 255, 255, 0);
+  --color-alpha-black-50: rgba(0, 0, 0, 0.5);
+  --color-alpha-black-60: rgba(0, 0, 0, 0.6);
+  --color-alpha-white-10: rgba(255, 255, 255, 0.1);
+  --color-alpha-white-15: rgba(255, 255, 255, 0.15);
+  --color-alpha-white-30: rgba(255, 255, 255, 0.3);
+  --color-alpha-white-50: rgba(255, 255, 255, 0.5);
+  --color-alpha-white-80: rgba(255, 255, 255, 0.8);
+  --color-alpha-white-90: rgba(255, 255, 255, 0.9);
+  --font-family-sans: Montserrat, system-ui, sans-serif;
+  --font-family-display: Montserrat, system-ui, sans-serif;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-size-2xs: 11px;
+  --font-size-xs: 12px;
+  --font-size-sm: 14px;
+  --font-size-md: 16px;
+  --font-size-lg: 18px;
+  --font-size-xl: 20px;
+  --font-size-2xl: 24px;
+  --font-size-3xl: 30px;
+  --font-size-4xl: 36px;
+  --font-size-5xl: 48px;
+  --font-size-6xl: 60px;
+  --font-line-height-xs: 16px;
+  --font-line-height-sm: 20px;
+  --font-line-height-md: 24px;
+  --font-line-height-lg: 28px;
+  --font-line-height-xl: 32px;
+  --font-line-height-2xl: 36px;
+  --font-line-height-3xl: 40px;
+  --font-line-height-4xl: 40px;
+  --font-line-height-6xl: 60px;
+  --space-0: 0px;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-7: 28px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-14: 56px;
+  --space-16: 64px;
+  --space-20: 80px;
+  --space-24: 96px;
+  --space-32: 128px;
+  --space-40: 160px;
+  --space-48: 192px;
+  --space-56: 224px;
+  --space-64: 256px;
+  --space-0-5: 2px; /** Separación entre thumb y track del toggle */
+  --space-1-5: 6px;
+  --space-2-5: 10px; /** Padding vertical de botón md y lg */
+  --size-control-xs: 32px;
+  --size-control-sm: 36px; /** Botón sm. Antes 38px (fuera de la grilla de 4) */
+  --size-control-md: 40px;
+  --size-control-lg: 44px;
+  --size-control-xl: 48px; /** Botón xl. Antes 46px (fuera de la grilla de 4) */
+  --size-container: 1280px;
+  --radius-none: 0px;
+  --radius-sm: 4px; /** Badges, skeletons */
+  --radius-md: 8px; /** Botones de compra y UI, stepper, inputs, cards de producto */
+  --radius-lg: 12px; /** Modales, bloques de checkout */
+  --radius-xl: 16px; /** Cards de contenido */
+  --radius-2xl: 20px;
+  --radius-3xl: 24px;
+  --radius-full: 9999px; /** CTAs de marketing, filtros, inputs pill, contador */
+  --border-width-sm: 1px;
+  --border-width-md: 1.5px;
+  --border-width-lg: 2px;
+  --border-width-focus: 2px; /** Campos: borde de 2px en foco (box-shadow inset para no mover el layout) */
+  --shadow-sm: 0px 1px 2px 0px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0px 1px 3px 0px rgba(0, 0, 0, 0.1), 0px 1px 2px -1px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0px 10px 15px -3px rgba(0, 0, 0, 0.1), 0px 4px 6px -4px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0px 20px 25px -5px rgba(0, 0, 0, 0.1), 0px 8px 10px -6px rgba(0, 0, 0, 0.1);
+  --shadow-2xl: 0px 25px 50px -12px rgba(0, 0, 0, 0.25);
+  --duration-fast: 150ms;
+  --duration-base: 300ms;
+  --duration-slow: 500ms;
+  --duration-slower: 1000ms;
+  --easing-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --easing-out: cubic-bezier(0, 0, 0.2, 1);
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --opacity-disabled: 0.5;
+  --opacity-overlay: 0.45;
+  --opacity-hover: 0.08;
+  --z-index-sticky: 40;
+  --z-index-header: 50;
+  --z-index-overlay: 60;
+  --z-index-mobile-menu: 65;
+  --z-index-drawer: 70;
+  --z-index-modal: 100;
+  --z-index-modal-top: 110;
+  --z-index-progress: 200;
+  --button-link-text-decoration: none;
+  --button-link-text-decoration-hover: underline;
+  --badge-counter-min-size: 16px;
+  --color-brand-default: var(--color-tomato-500); /** Logo, acentos de marca */
+  --color-brand-hover: var(--color-tomato-600);
+  --color-brand-active: var(--color-tomato-700);
+  --color-brand-subtle: var(--color-tomato-50);
+  --color-surface-page: var(--color-neutral-50); /** Fondo de página */
+  --color-surface-default: var(--color-base-white); /** Cards, modales, header */
+  --color-surface-subtle: var(--color-neutral-100); /** Secciones alternadas, hover neutro */
+  --color-surface-muted: var(--color-neutral-200); /** Skeletons, divisores gruesos */
+  --color-surface-inverse: var(--color-neutral-900); /** Footer, secciones oscuras */
+  --color-surface-overlay: var(--color-alpha-black-50); /** Detrás de drawers y modales */
+  --color-surface-overlay-strong: var(--color-alpha-black-60);
+  --color-surface-brand: var(--color-tomato-500); /** Contador del carrito, bloques de marca */
+  --color-surface-brand-subtle: var(--color-tomato-50);
+  --color-surface-accent: var(--color-sage-600); /** Barra superior, superficies verdes con texto (5.02:1) */
+  --color-text-primary: var(--color-neutral-900); /** Texto principal (17.4:1) */
+  --color-text-secondary: var(--color-neutral-500); /** Gramaje, metadatos (5.33:1) */
+  --color-text-tertiary: var(--color-neutral-200); /** Solo decorativo: numerales y flechas. Nunca información */
+  --color-text-disabled: var(--color-neutral-300);
+  --color-text-inverse: var(--color-base-white);
+  --color-text-inverse-muted: var(--color-alpha-white-80);
+  --color-text-on-brand: var(--color-base-white);
+  --color-text-link: var(--color-tomato-500);
+  --color-text-link-hover: var(--color-tomato-600);
+  --color-text-brand: var(--color-tomato-500);
+  --color-text-accent: var(--color-sage-600); /** Texto verde (5.02:1) */
+  --color-border-default: var(--color-neutral-200); /** Solo divisores y bordes decorativos. Controles usan form.border */
+  --color-border-strong: var(--color-neutral-900); /** Hover y selección de chips y filtros */
+  --color-border-focus: var(--color-tomato-500); /** Campos en foco: reemplaza el color del borde */
+  --color-border-brand: var(--color-tomato-500);
+  --color-border-brand-subtle: var(--color-tomato-200);
+  --color-border-accent: var(--color-sage-600);
+  --color-border-inverse: var(--color-alpha-white-30);
+  --color-icon-default: var(--color-neutral-600);
+  --color-icon-subtle: var(--color-neutral-500);
+  --color-icon-brand: var(--color-tomato-500);
+  --color-icon-inverse: var(--color-base-white);
+  --color-action-primary-bg: var(--color-tomato-500);
+  --color-action-primary-bg-hover: var(--color-tomato-600);
+  --color-action-primary-bg-active: var(--color-tomato-700);
+  --color-action-primary-fg: var(--color-base-white);
+  --color-action-secondary-bg: var(--color-neutral-900);
+  --color-action-secondary-bg-hover: var(--color-neutral-500);
+  --color-action-secondary-fg: var(--color-base-white);
+  --color-action-secondary-bg-active: var(--color-neutral-700);
+  --color-action-outline-bg-hover: var(--color-tomato-50);
+  --color-action-outline-bg-active: var(--color-tomato-100);
+  --color-action-outline-bg-focus: var(--color-tomato-100); /** Botón con foco de teclado dentro de un control (stepper). Ícono tomato.500 encima: ~4:1 */
+  --color-action-outline-bg: var(--color-base-white);
+  --color-action-accent-bg: var(--color-sage-600);
+  --color-action-accent-bg-hover: var(--color-sage-700);
+  --color-action-accent-fg: var(--color-base-white);
+  --color-action-destructive-bg: var(--color-red-600); /** Fondo de acciones destructivas (eliminar, vaciar carrito) */
+  --color-action-destructive-bg-hover: var(--color-red-700);
+  --color-action-destructive-bg-active: var(--color-red-800);
+  --color-action-destructive-fg: var(--color-base-white); /** Texto sobre action.destructive.bg */
+  --color-action-neutral-bg: var(--color-neutral-50);
+  --color-action-neutral-bg-hover: var(--color-neutral-100);
+  --color-action-neutral-bg-active: var(--color-neutral-200);
+  --color-action-disabled-bg: var(--color-neutral-100); /** Fondo de cualquier botón deshabilitado */
+  --color-action-disabled-fg: var(--color-neutral-300); /** Texto e ícono deshabilitado. WCAG no exige contraste en deshabilitados */
+  --color-action-disabled-border: var(--color-neutral-300);
+  --color-feedback-success-text: var(--color-green-700);
+  --color-feedback-success-bg: var(--color-green-50);
+  --color-feedback-success-border: var(--color-green-600); /** Borde de alertas y estados de éxito. 3.30:1 sobre blanco (1.4.11) */
+  --color-feedback-success-solid: var(--color-green-600); /** Relleno: barras, íconos sobre fondo. No usar con texto blanco (3.30:1) */
+  --color-feedback-warning-text: var(--color-yellow-700);
+  --color-feedback-warning-bg: var(--color-yellow-50);
+  --color-feedback-warning-border: var(--color-yellow-300);
+  --color-feedback-warning-solid: var(--color-yellow-600); /** Relleno: barras, íconos sobre fondo. No usar con texto blanco (3.30:1) */
+  --color-feedback-error-text: var(--color-red-700); /** 6.47:1 sobre blanco, 5.91:1 sobre error.bg */
+  --color-feedback-error-bg: var(--color-red-50);
+  --color-feedback-error-border: var(--color-red-600); /** Borde de alertas y estados de error. 4.83:1 sobre blanco */
+  --color-feedback-error-solid: var(--color-red-600); /** Relleno: barras, íconos sobre fondo. Texto blanco OK (4.83:1) */
+  --color-feedback-info-text: var(--color-blue-700);
+  --color-feedback-info-bg: var(--color-blue-50);
+  --color-feedback-info-border: var(--color-blue-300);
+  --color-feedback-info-solid: var(--color-blue-600); /** Relleno: barras, íconos sobre fondo. No usar con texto blanco (3.30:1) */
+  --color-form-bg: var(--color-base-white);
+  --color-form-border: var(--color-neutral-400); /** Borde de controles: 3.28:1 (WCAG 1.4.11) */
+  --color-form-border-hover: var(--color-neutral-600);
+  --color-form-control-off: var(--color-neutral-400); /** Track de toggle apagado: 3.28:1 */
+  --color-form-control-off-hover: var(--color-neutral-500);
+  --color-form-border-focus: var(--color-neutral-900); /** Foco de campos: 2px (border-width.focus) en neutral.900. El rojo queda solo para error */
+  --color-form-border-error: var(--color-red-600);
+  --color-form-bg-error: var(--color-red-50);
+  --color-form-bg-disabled: var(--color-neutral-100);
+  --color-form-placeholder: var(--color-neutral-500); /** 5.33:1. Es el gris más claro que pasa AA para texto */
+  --color-form-control-on-subtle: var(--color-tomato-50);
+  --color-focus-ring: var(--color-tomato-500);
+  --color-focus-ring-inverse: var(--color-base-white); /** Sobre fotos, superficies oscuras o de marca */
+  --color-commerce-price-current: var(--color-neutral-900);
+  --color-commerce-price-previous: var(--color-neutral-500);
+  --color-commerce-price-unit: var(--color-neutral-500);
+  --color-commerce-discount-bg: var(--color-base-white);
+  --color-commerce-discount-fg: var(--color-tomato-500);
+  --color-commerce-discount-border: var(--color-tomato-500);
+  --color-commerce-badge-dietary-bg: var(--color-sage-600);
+  --color-commerce-badge-dietary-fg: var(--color-base-white);
+  --color-commerce-shipping-free-fg: var(--color-green-700);
+  --elevation-subtle: var(--shadow-sm); /** Cards de contenido en reposo */
+  --elevation-card: var(--shadow-md); /** Card de producto en reposo */
+  --elevation-card-hover: var(--shadow-lg); /** Card de producto en hover, barra flotante */
+  --elevation-dropdown: var(--shadow-xl); /** Menús del nav, resultados de búsqueda */
+  --elevation-overlay: var(--shadow-2xl); /** Drawers, modales, bottom sheets */
+  --layer-sticky: var(--z-index-sticky);
+  --layer-header: var(--z-index-header);
+  --layer-overlay: var(--z-index-overlay);
+  --layer-mobile-menu: var(--z-index-mobile-menu);
+  --layer-drawer: var(--z-index-drawer);
+  --layer-modal: var(--z-index-modal);
+  --layer-modal-top: var(--z-index-modal-top);
+  --layer-progress: var(--z-index-progress);
+  --typography-display: var(--font-weight-semibold) var(--font-size-6xl)/var(--font-line-height-6xl) var(--font-family-sans); /** Hero (h1) */
+  --typography-heading-xl: var(--font-weight-semibold) var(--font-size-4xl)/var(--font-line-height-4xl) var(--font-family-sans); /** Títulos de página (h1) desde md */
+  --typography-heading-lg: var(--font-weight-semibold) var(--font-size-3xl)/var(--font-line-height-2xl) var(--font-family-sans); /** Títulos de página (h1) mobile y de sección (h2) */
+  --typography-heading-md: var(--font-weight-semibold) var(--font-size-xl)/var(--font-line-height-lg) var(--font-family-sans); /** Subtítulos de bloque */
+  --typography-heading-sm: var(--font-weight-semibold) var(--font-size-sm)/var(--font-line-height-sm) var(--font-family-sans); /** Nombre de producto en card (h3) */
+  --typography-body-lg: var(--font-weight-regular) var(--font-size-lg)/var(--font-line-height-lg) var(--font-family-sans); /** Texto destacado: bajada del hero (desde md) */
+  --typography-body-md: var(--font-weight-regular) var(--font-size-md)/var(--font-line-height-md) var(--font-family-sans); /** Texto base */
+  --typography-body-sm: var(--font-weight-regular) var(--font-size-sm)/var(--font-line-height-sm) var(--font-family-sans); /** Descripciones, footer */
+  --typography-label: var(--font-weight-medium) var(--font-size-sm)/var(--font-line-height-sm) var(--font-family-sans); /** Botones y controles */
+  --typography-caption: var(--font-weight-regular) var(--font-size-xs)/var(--font-line-height-xs) var(--font-family-sans); /** Precio por unidad, legales */
+  --motion-transition-fast: var(--duration-fast) var(--easing-standard) 0ms; /** Hover de botones y links */
+  --motion-transition-base: var(--duration-base) var(--easing-standard) 0ms; /** Drawers, acordeones */
+  --button-shape-default: var(--radius-md); /** Acciones de compra y UI: 8px */
+  --button-shape-pill: var(--radius-full); /** Solo marketing: hero, banners, newsletter */
+  --button-focus-width: var(--border-width-lg); /** Botones: 2px por fuera (no tienen borde que recolorear) */
+  --button-focus-offset: var(--border-width-lg); /** Separación entre botón y anillo: 2px */
+  --button-size-sm-height: var(--size-control-sm); /** 36px: 20 interlineado + 8×2 */
+  --button-size-sm-padding-y: var(--space-2);
+  --button-size-sm-padding-x: var(--space-3);
+  --button-size-sm-gap: var(--space-1-5);
+  --button-size-sm-font-size: var(--font-size-sm);
+  --button-size-sm-line-height: var(--font-line-height-sm);
+  --button-size-sm-icon-size: var(--space-4);
+  --button-size-md-height: var(--size-control-md); /** 40px: 20 interlineado + 10×2 */
+  --button-size-md-padding-y: var(--space-2-5);
+  --button-size-md-padding-x: var(--space-4);
+  --button-size-md-gap: var(--space-2);
+  --button-size-md-font-size: var(--font-size-sm);
+  --button-size-md-line-height: var(--font-line-height-sm);
+  --button-size-md-icon-size: var(--space-4);
+  --button-size-lg-height: var(--size-control-lg); /** 44px: 20 interlineado + 12×2. Mínimo táctil */
+  --button-size-lg-padding-y: var(--space-3);
+  --button-size-lg-padding-x: var(--space-5);
+  --button-size-lg-gap: var(--space-2);
+  --button-size-lg-font-size: var(--font-size-sm);
+  --button-size-lg-line-height: var(--font-line-height-sm);
+  --button-size-lg-icon-size: var(--space-5);
+  --button-size-xl-height: var(--size-control-xl); /** 48px: 24 interlineado + 12×2 */
+  --button-size-xl-padding-y: var(--space-3);
+  --button-size-xl-padding-x: var(--space-6);
+  --button-size-xl-gap: var(--space-2);
+  --button-size-xl-font-size: var(--font-size-md);
+  --button-size-xl-line-height: var(--font-line-height-md);
+  --button-size-xl-icon-size: var(--space-5);
+  --button-primary-font-weight: var(--font-weight-semibold);
+  --button-primary-height: var(--size-control-lg);
+  --button-primary-padding-x: var(--space-8);
+  --button-primary-padding-y: var(--space-3);
+  --button-add-to-cart-font-weight: var(--font-weight-medium);
+  --button-add-to-cart-height: var(--size-control-md);
+  --button-secondary-font-weight: var(--font-weight-medium);
+  --button-secondary-height: var(--size-control-md);
+  --button-secondary-padding-x: var(--space-4);
+  --button-outline-font-weight: var(--font-weight-medium);
+  --button-outline-height: var(--size-control-lg);
+  --button-outline-padding-x: var(--space-4);
+  --button-outline-padding-y: var(--space-3);
+  --button-neutral-font-weight: var(--font-weight-medium);
+  --button-neutral-padding-x: var(--space-6);
+  --button-inverse-font-weight: var(--font-weight-medium);
+  --button-inverse-height: var(--size-control-md);
+  --button-inverse-padding-x: var(--space-8);
+  --button-outline-inverse-bg-hover: var(--color-alpha-white-10);
+  --button-outline-inverse-bg-active: var(--color-alpha-white-15);
+  --button-outline-inverse-border: var(--color-alpha-white-50); /** Va sobre fotos de banners */
+  --button-outline-inverse-font-weight: var(--font-weight-medium);
+  --button-outline-inverse-height: var(--size-control-lg);
+  --button-outline-inverse-padding-x: var(--space-4);
+  --button-link-padding-x: var(--space-0); /** Se alinea con el texto que lo rodea */
+  --button-link-font-weight: var(--font-weight-medium);
+  --button-disabled-opacity: var(--opacity-disabled);
+  --button-ghost-bg: var(--color-base-transparent);
+  --button-ghost-font-weight: var(--font-weight-medium);
+  --button-ghost-padding-x: var(--space-0); /** Se alinea con el texto que lo rodea */
+  --stepper-border-width: var(--border-width-sm);
+  --stepper-height-sm: var(--size-control-xs); /** Carrito y drawer */
+  --stepper-height-lg: var(--size-control-lg); /** PDP */
+  --stepper-padding-x: var(--space-3);
+  --stepper-hit-area: var(--size-control-md);
+  --stepper-hit-area-sm: var(--size-control-xs);
+  --stepper-font-weight: var(--font-weight-medium);
+  --input-form-radius: var(--radius-md);
+  --input-form-height: var(--size-control-lg);
+  --input-form-padding-x: var(--space-3);
+  --input-pill-radius: var(--radius-full);
+  --input-pill-height: var(--size-control-lg);
+  --input-pill-padding-x: var(--space-4);
+  --badge-discount-radius: var(--radius-sm);
+  --badge-discount-padding-x: var(--space-1-5);
+  --badge-discount-padding-y: var(--space-1-5);
+  --badge-discount-font-size: var(--font-size-xs);
+  --badge-discount-font-weight: var(--font-weight-bold);
+  --badge-dietary-radius: var(--radius-sm);
+  --badge-dietary-font-size: var(--font-size-xs); /** 12px. 11px (2xs) queda solo para metadatos decorativos */
+  --badge-counter-radius: var(--radius-full);
+  --badge-counter-font-size: var(--font-size-2xs);
+  --card-product-radius: var(--radius-md);
+  --card-product-gap: var(--space-3);
+  --card-content-radius: var(--radius-xl);
+  --select-radius: var(--radius-md);
+  --select-size-md-height: var(--size-control-md); /** 40px: barras de herramientas (Ordenar por) */
+  --select-size-lg-height: var(--size-control-lg); /** 44px: formularios, igual que input */
+  --select-padding-x: var(--space-3);
+  --select-gap: var(--space-2);
+  --select-icon-size: var(--space-5);
+  --select-focus-width: var(--border-width-focus); /** 1px recoloreando el borde, igual que input */
+  --select-menu-radius: var(--radius-md);
+  --select-menu-padding: var(--space-1);
+  --select-menu-gap: var(--space-1); /** Entre menú y campo */
+  --select-option-height: var(--size-control-md);
+  --select-option-padding-x: var(--space-3);
+  --select-option-radius: var(--radius-sm);
+  --toggle-focus-width: var(--border-width-lg);
+  --toggle-focus-offset: var(--border-width-lg);
+  --toggle-radius: var(--radius-full);
+  --toggle-padding: var(--space-0-5); /** Separación thumb–track */
+  --toggle-gap: var(--space-2); /** Entre toggle y label */
+  --toggle-size-sm-width: var(--space-8); /** 32×20 */
+  --toggle-size-sm-height: var(--space-5);
+  --toggle-size-sm-thumb: var(--space-4);
+  --toggle-size-md-width: var(--space-10); /** 40×24 */
+  --toggle-size-md-height: var(--space-6);
+  --toggle-size-md-thumb: var(--space-5);
+  --chip-height: var(--size-control-sm); /** 36px: el alto más chico de controles del DS */
+  --chip-padding-x: var(--space-4);
+  --chip-gap: var(--space-1-5);
+  --chip-font-size: var(--font-size-sm);
+  --chip-font-weight: var(--font-weight-medium);
+  --chip-border-width: var(--border-width-sm);
+  --chip-focus-width: var(--border-width-lg);
+  --dropdown-bg: var(--color-base-white);
+  --dropdown-item-gap: var(--space-1);
+  --dropdown-item-padding: var(--space-1);
+  --dropdown-item-radius: var(--radius-md);
+  --carousel-dot-inactive: var(--color-alpha-white-50); /** Punto inactivo del carrusel sobre foto */
+  --color-action-outline-fg-hover: var(--color-brand-hover); /** 5.75:1 sobre outline.bg-hover */
+  --color-action-outline-fg-active: var(--color-brand-active); /** 7.15:1 sobre outline.bg-active */
+  --color-action-neutral-fg: var(--color-text-primary);
+  --color-action-neutral-border: var(--color-border-default);
+  --color-action-link-fg: var(--color-text-link);
+  --color-action-link-fg-hover: var(--color-text-link-hover);
+  --color-action-link-fg-active: var(--color-brand-active);
+  --color-form-label: var(--color-text-primary); /** Etiqueta del campo */
+  --color-form-text: var(--color-text-primary); /** Valor ingresado. Se distingue del placeholder por contraste */
+  --color-form-helper: var(--color-text-secondary); /** Texto de ayuda debajo del campo */
+  --color-form-text-disabled: var(--color-action-disabled-fg);
+  --color-form-border-disabled: var(--color-action-disabled-border);
+  --color-form-control-on: var(--color-brand-default);
+  --color-form-control-on-hover: var(--color-brand-hover);
+  --button-focus-ring: var(--color-focus-ring);
+  --button-primary-bg: var(--color-action-primary-bg);
+  --button-primary-bg-hover: var(--color-action-primary-bg-hover);
+  --button-primary-bg-active: var(--color-action-primary-bg-active);
+  --button-primary-fg: var(--color-action-primary-fg);
+  --button-primary-radius: var(--button-shape-default);
+  --button-add-to-cart-bg: var(--color-action-primary-bg);
+  --button-add-to-cart-bg-hover: var(--color-action-primary-bg-hover);
+  --button-add-to-cart-bg-active: var(--color-action-primary-bg-active);
+  --button-add-to-cart-fg: var(--color-action-primary-fg);
+  --button-add-to-cart-radius: var(--button-shape-default); /** Comparte forma con stepper */
+  --button-secondary-bg: var(--color-action-secondary-bg);
+  --button-secondary-bg-hover: var(--color-action-secondary-bg-hover);
+  --button-secondary-bg-active: var(--color-action-secondary-bg-active);
+  --button-secondary-fg: var(--color-action-secondary-fg);
+  --button-secondary-radius: var(--button-shape-default);
+  --button-outline-bg: var(--color-action-outline-bg);
+  --button-outline-bg-hover: var(--color-action-outline-bg-hover);
+  --button-outline-bg-active: var(--color-action-outline-bg-active);
+  --button-outline-fg: var(--color-text-brand);
+  --button-outline-border: var(--color-border-brand);
+  --button-outline-radius: var(--button-shape-default);
+  --button-neutral-bg: var(--color-action-neutral-bg);
+  --button-neutral-bg-hover: var(--color-action-neutral-bg-hover);
+  --button-neutral-bg-active: var(--color-action-neutral-bg-active);
+  --button-neutral-radius: var(--button-shape-default);
+  --button-inverse-bg: var(--color-surface-default);
+  --button-inverse-bg-hover: var(--color-surface-subtle);
+  --button-inverse-bg-active: var(--color-surface-muted);
+  --button-inverse-fg: var(--color-text-primary);
+  --button-inverse-radius: var(--button-shape-pill); /** Va sobre fotos de banners: siempre pill */
+  --button-outline-inverse-fg: var(--color-text-inverse);
+  --button-outline-inverse-radius: var(--button-shape-pill); /** Va sobre fotos de banners: siempre pill */
+  --button-disabled-bg: var(--color-action-disabled-bg); /** Compartido por todas las jerarquías salvo link */
+  --button-disabled-fg: var(--color-action-disabled-fg);
+  --button-disabled-border: var(--color-action-disabled-border); /** Solo en jerarquías con borde (outline, neutral) */
+  --button-disabled-link-fg: var(--color-action-disabled-fg); /** Link deshabilitado: solo cambia el texto */
+  --button-ghost-fg: var(--color-text-primary);
+  --button-ghost-fg-active: var(--color-text-primary);
+  --button-ghost-fg-hover: var(--color-text-secondary);
+  --button-ghost-icon: var(--color-icon-default);
+  --stepper-bg: var(--color-surface-default);
+  --stepper-bg-hover: var(--color-action-outline-bg-hover);
+  --stepper-bg-focus: var(--color-action-outline-bg-focus); /** Fondo del botón −/+ con foco de teclado */
+  --stepper-fg: var(--color-text-primary);
+  --stepper-icon: var(--color-icon-brand);
+  --stepper-border: var(--color-border-brand);
+  --stepper-height: var(--button-size-md-height);
+  --stepper-transition: var(--motion-transition-fast);
+  --input-form-bg: var(--color-form-bg);
+  --input-form-fg: var(--color-text-primary);
+  --input-form-border: var(--color-form-border);
+  --input-form-border-focus: var(--color-form-border-focus);
+  --input-pill-bg: var(--color-form-bg);
+  --input-pill-fg: var(--color-text-primary);
+  --input-pill-border: var(--color-form-border);
+  --input-pill-border-focus: var(--color-form-border-focus);
+  --badge-discount-bg: var(--color-commerce-discount-bg);
+  --badge-discount-fg: var(--color-commerce-discount-fg);
+  --badge-discount-border: var(--color-commerce-discount-border);
+  --badge-dietary-bg: var(--color-commerce-badge-dietary-bg);
+  --badge-dietary-fg: var(--color-commerce-badge-dietary-fg);
+  --badge-counter-bg: var(--color-surface-brand);
+  --badge-counter-fg: var(--color-text-inverse);
+  --card-product-bg: var(--color-surface-default);
+  --card-product-border: var(--color-border-default);
+  --card-product-shadow: var(--elevation-card);
+  --card-product-shadow-hover: var(--elevation-card-hover);
+  --card-content-border: var(--color-border-default);
+  --card-content-shadow: var(--elevation-subtle);
+  --select-bg: var(--color-form-bg);
+  --select-bg-disabled: var(--color-form-bg-disabled);
+  --select-border: var(--color-form-border); /** Default */
+  --select-border-hover: var(--color-form-border-hover);
+  --select-border-focus: var(--color-form-border-focus); /** Focus y abierto (active) */
+  --select-border-error: var(--color-form-border-error);
+  --select-border-disabled: var(--color-action-disabled-border);
+  --select-placeholder: var(--color-form-placeholder);
+  --select-icon: var(--color-icon-default); /** Chevron */
+  --select-height: var(--select-size-lg-height); /** Por defecto: lg (formularios) */
+  --select-menu-bg: var(--color-surface-default);
+  --select-menu-border: var(--color-border-default);
+  --select-menu-elevation: var(--elevation-dropdown);
+  --select-menu-layer: var(--layer-overlay);
+  --select-option-fg: var(--color-text-primary);
+  --select-option-bg-hover: var(--color-surface-subtle);
+  --select-option-bg-selected: var(--color-brand-subtle);
+  --select-option-fg-selected: var(--color-brand-hover); /** 5.75:1 sobre brand.subtle */
+  --select-option-check: var(--color-icon-brand); /** Tilde de la opción elegida */
+  --toggle-track-off: var(--color-form-control-off); /** Default */
+  --toggle-track-off-hover: var(--color-form-control-off-hover);
+  --toggle-track-on: var(--color-action-primary-bg); /** Active */
+  --toggle-track-on-hover: var(--color-action-primary-bg-hover);
+  --toggle-track-disabled-off: var(--color-action-disabled-bg);
+  --toggle-track-disabled-on: var(--color-border-brand-subtle); /** Deshabilitado y encendido: se sigue leyendo como encendido */
+  --toggle-thumb: var(--color-surface-default);
+  --toggle-thumb-disabled: var(--color-surface-default);
+  --toggle-thumb-elevation: var(--elevation-subtle);
+  --toggle-focus-ring: var(--color-focus-ring);
+  --toggle-transition: var(--motion-transition-fast);
+  --chip-radius: var(--button-shape-pill); /** Filtros: siempre pill */
+  --chip-bg: var(--color-surface-default);
+  --chip-fg: var(--color-text-primary);
+  --chip-border: var(--color-form-border); /** 3:1 (1.4.11) */
+  --chip-bg-hover: var(--color-surface-subtle);
+  --chip-bg-selected: var(--color-action-primary-bg);
+  --chip-fg-selected: var(--color-action-primary-fg);
+  --chip-border-selected: var(--color-action-primary-bg);
+  --chip-bg-selected-hover: var(--color-action-primary-bg-hover);
+  --chip-focus-ring: var(--color-focus-ring);
+  --border-neutral: var(--color-border-default);
+  --divider-color: var(--color-border-default);
+  --dropdown-header-fg: var(--color-text-primary);
+  --dropdown-header-icon: var(--color-icon-brand);
+  --dropdown-item-bg-active: var(--color-surface-muted);
+  --dropdown-item-bg-hover: var(--color-surface-subtle);
+  --dropdown-item-fg: var(--color-text-primary);
+  --dropdown-item-fg-disabled: var(--color-action-disabled-fg);
+  --dropdown-item-icon: var(--color-icon-default);
+  --dropdown-item-layer: var(--layer-overlay);
+  --dropdown-link-fg: var(--color-text-link);
+  --dropdown-link-fg-hover: var(--color-text-link-hover);
+  --color-form-label-disabled: var(--color-form-text-disabled); /** Etiqueta de campo deshabilitado */
+  --button-outline-fg-hover: var(--color-action-outline-fg-hover);
+  --button-outline-fg-active: var(--color-action-outline-fg-active);
+  --button-neutral-fg: var(--color-action-neutral-fg);
+  --button-neutral-border: var(--color-action-neutral-border);
+  --button-link-fg: var(--color-action-link-fg);
+  --button-link-fg-hover: var(--color-action-link-fg-hover);
+  --button-link-fg-active: var(--color-action-link-fg-active);
+  --button-ghost-fg-disable: var(--button-disabled-fg);
+  --stepper-radius: var(--button-add-to-cart-radius); /** Siempre igual al botón Agregar */
+  --select-label: var(--color-form-label);
+  --select-text: var(--color-form-text); /** Opción elegida */
+  --select-text-disabled: var(--color-form-text-disabled);
+  --select-helper: var(--color-form-helper);
+  --select-icon-disabled: var(--color-form-text-disabled);
+  --select-option-fg-disabled: var(--color-form-text-disabled);
+  --toggle-label: var(--color-form-label);
+  --select-label-disabled: var(--color-form-label-disabled);
+  --toggle-label-disabled: var(--color-form-label-disabled);
+
+  /* Canales RGB para modificadores de opacidad de Tailwind */
+  --color-neutral-50-rgb: 250 250 250;
+  --color-neutral-100-rgb: 245 245 245;
+  --color-neutral-200-rgb: 228 228 228;
+  --color-neutral-300-rgb: 212 212 212;
+  --color-neutral-400-rgb: 142 142 142;
+  --color-neutral-500-rgb: 107 107 107;
+  --color-neutral-600-rgb: 82 82 82;
+  --color-neutral-700-rgb: 64 64 64;
+  --color-neutral-800-rgb: 38 38 38;
+  --color-neutral-900-rgb: 26 26 26;
+  --color-neutral-950-rgb: 10 10 10;
+  --color-tomato-50-rgb: 255 241 242;
+  --color-tomato-100-rgb: 255 225 227;
+  --color-tomato-200-rgb: 255 199 202;
+  --color-tomato-300-rgb: 255 159 165;
+  --color-tomato-400-rgb: 255 104 113;
+  --color-tomato-500-rgb: 227 6 19;
+  --color-tomato-600-rgb: 194 5 16;
+  --color-tomato-700-rgb: 154 4 13;
+  --color-tomato-800-rgb: 133 3 13;
+  --color-tomato-900-rgb: 97 2 9;
+  --color-tomato-950-rgb: 61 1 6;
+  --color-sage-50-rgb: 239 251 242;
+  --color-sage-100-rgb: 221 246 227;
+  --color-sage-200-rgb: 188 236 200;
+  --color-sage-300-rgb: 139 222 161;
+  --color-sage-400-rgb: 79 203 112;
+  --color-sage-500-rgb: 26 145 57;
+  --color-sage-600-rgb: 21 128 61;
+  --color-sage-700-rgb: 18 101 40;
+  --color-sage-800-rgb: 14 79 32;
+  --color-sage-900-rgb: 10 57 23;
+  --color-sage-950-rgb: 6 36 14;
+  --color-green-50-rgb: 240 253 244;
+  --color-green-100-rgb: 220 252 231;
+  --color-green-200-rgb: 187 247 208;
+  --color-green-300-rgb: 134 239 172;
+  --color-green-400-rgb: 74 222 128;
+  --color-green-500-rgb: 34 197 94;
+  --color-green-600-rgb: 22 163 74;
+  --color-green-700-rgb: 21 128 61;
+  --color-green-800-rgb: 22 101 52;
+  --color-green-900-rgb: 20 83 45;
+  --color-green-950-rgb: 5 46 22;
+  --color-yellow-50-rgb: 254 252 232;
+  --color-yellow-100-rgb: 254 249 195;
+  --color-yellow-200-rgb: 254 240 138;
+  --color-yellow-300-rgb: 253 224 71;
+  --color-yellow-400-rgb: 250 204 21;
+  --color-yellow-500-rgb: 234 179 8;
+  --color-yellow-600-rgb: 202 138 4;
+  --color-yellow-700-rgb: 161 98 7;
+  --color-yellow-800-rgb: 133 77 14;
+  --color-yellow-900-rgb: 113 63 18;
+  --color-yellow-950-rgb: 66 32 6;
+  --color-red-50-rgb: 254 242 242;
+  --color-red-100-rgb: 254 226 226;
+  --color-red-200-rgb: 254 202 202;
+  --color-red-300-rgb: 252 165 165;
+  --color-red-400-rgb: 248 113 113;
+  --color-red-500-rgb: 239 68 68;
+  --color-red-600-rgb: 220 38 38;
+  --color-red-700-rgb: 185 28 28;
+  --color-red-800-rgb: 153 27 27;
+  --color-red-900-rgb: 127 29 29;
+  --color-red-950-rgb: 69 10 10;
+  --color-blue-50-rgb: 239 246 255;
+  --color-blue-100-rgb: 219 234 254;
+  --color-blue-200-rgb: 191 219 254;
+  --color-blue-300-rgb: 147 197 253;
+  --color-blue-400-rgb: 96 165 250;
+  --color-blue-500-rgb: 59 130 246;
+  --color-blue-600-rgb: 37 99 235;
+  --color-blue-700-rgb: 29 78 216;
+  --color-blue-800-rgb: 30 64 175;
+  --color-blue-900-rgb: 30 58 138;
+  --color-blue-950-rgb: 23 37 84;
+  --color-base-white-rgb: 255 255 255;
+  --color-base-black-rgb: 20 20 20;
+  --color-brand-default-rgb: 227 6 19;
+  --color-brand-hover-rgb: 194 5 16;
+  --color-brand-active-rgb: 154 4 13;
+  --color-brand-subtle-rgb: 255 241 242;
+  --color-surface-page-rgb: 250 250 250;
+  --color-surface-default-rgb: 255 255 255;
+  --color-surface-subtle-rgb: 245 245 245;
+  --color-surface-muted-rgb: 228 228 228;
+  --color-surface-inverse-rgb: 26 26 26;
+  --color-surface-brand-rgb: 227 6 19;
+  --color-surface-brand-subtle-rgb: 255 241 242;
+  --color-surface-accent-rgb: 21 128 61;
+  --color-text-primary-rgb: 26 26 26;
+  --color-text-secondary-rgb: 107 107 107;
+  --color-text-tertiary-rgb: 228 228 228;
+  --color-text-disabled-rgb: 212 212 212;
+  --color-text-inverse-rgb: 255 255 255;
+  --color-text-on-brand-rgb: 255 255 255;
+  --color-text-link-rgb: 227 6 19;
+  --color-text-link-hover-rgb: 194 5 16;
+  --color-text-brand-rgb: 227 6 19;
+  --color-text-accent-rgb: 21 128 61;
+  --color-border-default-rgb: 228 228 228;
+  --color-border-strong-rgb: 26 26 26;
+  --color-border-focus-rgb: 227 6 19;
+  --color-border-brand-rgb: 227 6 19;
+  --color-border-brand-subtle-rgb: 255 199 202;
+  --color-border-accent-rgb: 21 128 61;
+  --color-icon-default-rgb: 82 82 82;
+  --color-icon-subtle-rgb: 107 107 107;
+  --color-icon-brand-rgb: 227 6 19;
+  --color-icon-inverse-rgb: 255 255 255;
+  --color-action-primary-bg-rgb: 227 6 19;
+  --color-action-primary-bg-hover-rgb: 194 5 16;
+  --color-action-primary-bg-active-rgb: 154 4 13;
+  --color-action-primary-fg-rgb: 255 255 255;
+  --color-action-secondary-bg-rgb: 26 26 26;
+  --color-action-secondary-bg-hover-rgb: 107 107 107;
+  --color-action-secondary-fg-rgb: 255 255 255;
+  --color-action-secondary-bg-active-rgb: 64 64 64;
+  --color-action-outline-bg-hover-rgb: 255 241 242;
+  --color-action-outline-bg-active-rgb: 255 225 227;
+  --color-action-outline-bg-focus-rgb: 255 225 227;
+  --color-action-outline-fg-hover-rgb: 194 5 16;
+  --color-action-outline-fg-active-rgb: 154 4 13;
+  --color-action-outline-bg-rgb: 255 255 255;
+  --color-action-accent-bg-rgb: 21 128 61;
+  --color-action-accent-bg-hover-rgb: 18 101 40;
+  --color-action-accent-fg-rgb: 255 255 255;
+  --color-action-destructive-bg-rgb: 220 38 38;
+  --color-action-destructive-bg-hover-rgb: 185 28 28;
+  --color-action-destructive-bg-active-rgb: 153 27 27;
+  --color-action-destructive-fg-rgb: 255 255 255;
+  --color-action-neutral-bg-rgb: 250 250 250;
+  --color-action-neutral-bg-hover-rgb: 245 245 245;
+  --color-action-neutral-bg-active-rgb: 228 228 228;
+  --color-action-neutral-fg-rgb: 26 26 26;
+  --color-action-neutral-border-rgb: 228 228 228;
+  --color-action-link-fg-rgb: 227 6 19;
+  --color-action-link-fg-hover-rgb: 194 5 16;
+  --color-action-link-fg-active-rgb: 154 4 13;
+  --color-action-disabled-bg-rgb: 245 245 245;
+  --color-action-disabled-fg-rgb: 212 212 212;
+  --color-action-disabled-border-rgb: 212 212 212;
+  --color-feedback-success-text-rgb: 21 128 61;
+  --color-feedback-success-bg-rgb: 240 253 244;
+  --color-feedback-success-border-rgb: 22 163 74;
+  --color-feedback-success-solid-rgb: 22 163 74;
+  --color-feedback-warning-text-rgb: 161 98 7;
+  --color-feedback-warning-bg-rgb: 254 252 232;
+  --color-feedback-warning-border-rgb: 253 224 71;
+  --color-feedback-warning-solid-rgb: 202 138 4;
+  --color-feedback-error-text-rgb: 185 28 28;
+  --color-feedback-error-bg-rgb: 254 242 242;
+  --color-feedback-error-border-rgb: 220 38 38;
+  --color-feedback-error-solid-rgb: 220 38 38;
+  --color-feedback-info-text-rgb: 29 78 216;
+  --color-feedback-info-bg-rgb: 239 246 255;
+  --color-feedback-info-border-rgb: 147 197 253;
+  --color-feedback-info-solid-rgb: 37 99 235;
+  --color-form-bg-rgb: 255 255 255;
+  --color-form-border-rgb: 142 142 142;
+  --color-form-border-hover-rgb: 82 82 82;
+  --color-form-control-off-rgb: 142 142 142;
+  --color-form-control-off-hover-rgb: 107 107 107;
+  --color-form-border-focus-rgb: 26 26 26;
+  --color-form-border-error-rgb: 220 38 38;
+  --color-form-bg-error-rgb: 254 242 242;
+  --color-form-bg-disabled-rgb: 245 245 245;
+  --color-form-label-rgb: 26 26 26;
+  --color-form-label-disabled-rgb: 212 212 212;
+  --color-form-text-rgb: 26 26 26;
+  --color-form-placeholder-rgb: 107 107 107;
+  --color-form-helper-rgb: 107 107 107;
+  --color-form-text-disabled-rgb: 212 212 212;
+  --color-form-border-disabled-rgb: 212 212 212;
+  --color-form-control-on-rgb: 227 6 19;
+  --color-form-control-on-hover-rgb: 194 5 16;
+  --color-form-control-on-subtle-rgb: 255 241 242;
+  --color-focus-ring-rgb: 227 6 19;
+  --color-focus-ring-inverse-rgb: 255 255 255;
+  --color-commerce-price-current-rgb: 26 26 26;
+  --color-commerce-price-previous-rgb: 107 107 107;
+  --color-commerce-price-unit-rgb: 107 107 107;
+  --color-commerce-discount-bg-rgb: 255 255 255;
+  --color-commerce-discount-fg-rgb: 227 6 19;
+  --color-commerce-discount-border-rgb: 227 6 19;
+  --color-commerce-badge-dietary-bg-rgb: 21 128 61;
+  --color-commerce-badge-dietary-fg-rgb: 255 255 255;
+  --color-commerce-shipping-free-fg-rgb: 21 128 61;
+  --button-focus-ring-rgb: 227 6 19;
+  --button-primary-bg-rgb: 227 6 19;
+  --button-primary-bg-hover-rgb: 194 5 16;
+  --button-primary-bg-active-rgb: 154 4 13;
+  --button-primary-fg-rgb: 255 255 255;
+  --button-add-to-cart-bg-rgb: 227 6 19;
+  --button-add-to-cart-bg-hover-rgb: 194 5 16;
+  --button-add-to-cart-bg-active-rgb: 154 4 13;
+  --button-add-to-cart-fg-rgb: 255 255 255;
+  --button-secondary-bg-rgb: 26 26 26;
+  --button-secondary-bg-hover-rgb: 107 107 107;
+  --button-secondary-bg-active-rgb: 64 64 64;
+  --button-secondary-fg-rgb: 255 255 255;
+  --button-outline-bg-rgb: 255 255 255;
+  --button-outline-bg-hover-rgb: 255 241 242;
+  --button-outline-bg-active-rgb: 255 225 227;
+  --button-outline-fg-rgb: 227 6 19;
+  --button-outline-fg-hover-rgb: 194 5 16;
+  --button-outline-fg-active-rgb: 154 4 13;
+  --button-outline-border-rgb: 227 6 19;
+  --button-neutral-bg-rgb: 250 250 250;
+  --button-neutral-bg-hover-rgb: 245 245 245;
+  --button-neutral-bg-active-rgb: 228 228 228;
+  --button-neutral-fg-rgb: 26 26 26;
+  --button-neutral-border-rgb: 228 228 228;
+  --button-inverse-bg-rgb: 255 255 255;
+  --button-inverse-bg-hover-rgb: 245 245 245;
+  --button-inverse-bg-active-rgb: 228 228 228;
+  --button-inverse-fg-rgb: 26 26 26;
+  --button-outline-inverse-fg-rgb: 255 255 255;
+  --button-link-fg-rgb: 227 6 19;
+  --button-link-fg-hover-rgb: 194 5 16;
+  --button-link-fg-active-rgb: 154 4 13;
+  --button-disabled-bg-rgb: 245 245 245;
+  --button-disabled-fg-rgb: 212 212 212;
+  --button-disabled-border-rgb: 212 212 212;
+  --button-disabled-link-fg-rgb: 212 212 212;
+  --button-ghost-fg-rgb: 26 26 26;
+  --button-ghost-fg-active-rgb: 26 26 26;
+  --button-ghost-fg-disable-rgb: 212 212 212;
+  --button-ghost-fg-hover-rgb: 107 107 107;
+  --button-ghost-icon-rgb: 82 82 82;
+  --stepper-bg-rgb: 255 255 255;
+  --stepper-bg-hover-rgb: 255 241 242;
+  --stepper-bg-focus-rgb: 255 225 227;
+  --stepper-fg-rgb: 26 26 26;
+  --stepper-icon-rgb: 227 6 19;
+  --stepper-border-rgb: 227 6 19;
+  --input-form-bg-rgb: 255 255 255;
+  --input-form-fg-rgb: 26 26 26;
+  --input-form-border-rgb: 142 142 142;
+  --input-form-border-focus-rgb: 26 26 26;
+  --input-pill-bg-rgb: 255 255 255;
+  --input-pill-fg-rgb: 26 26 26;
+  --input-pill-border-rgb: 142 142 142;
+  --input-pill-border-focus-rgb: 26 26 26;
+  --badge-discount-bg-rgb: 255 255 255;
+  --badge-discount-fg-rgb: 227 6 19;
+  --badge-discount-border-rgb: 227 6 19;
+  --badge-dietary-bg-rgb: 21 128 61;
+  --badge-dietary-fg-rgb: 255 255 255;
+  --badge-counter-bg-rgb: 227 6 19;
+  --badge-counter-fg-rgb: 255 255 255;
+  --card-product-bg-rgb: 255 255 255;
+  --card-product-border-rgb: 228 228 228;
+  --card-content-border-rgb: 228 228 228;
+  --select-bg-rgb: 255 255 255;
+  --select-bg-disabled-rgb: 245 245 245;
+  --select-border-rgb: 142 142 142;
+  --select-border-hover-rgb: 82 82 82;
+  --select-border-focus-rgb: 26 26 26;
+  --select-border-error-rgb: 220 38 38;
+  --select-border-disabled-rgb: 212 212 212;
+  --select-label-rgb: 26 26 26;
+  --select-label-disabled-rgb: 212 212 212;
+  --select-text-rgb: 26 26 26;
+  --select-placeholder-rgb: 107 107 107;
+  --select-text-disabled-rgb: 212 212 212;
+  --select-helper-rgb: 107 107 107;
+  --select-icon-rgb: 82 82 82;
+  --select-icon-disabled-rgb: 212 212 212;
+  --select-menu-bg-rgb: 255 255 255;
+  --select-menu-border-rgb: 228 228 228;
+  --select-option-fg-rgb: 26 26 26;
+  --select-option-bg-hover-rgb: 245 245 245;
+  --select-option-bg-selected-rgb: 255 241 242;
+  --select-option-fg-selected-rgb: 194 5 16;
+  --select-option-check-rgb: 227 6 19;
+  --select-option-fg-disabled-rgb: 212 212 212;
+  --toggle-track-off-rgb: 142 142 142;
+  --toggle-track-off-hover-rgb: 107 107 107;
+  --toggle-track-on-rgb: 227 6 19;
+  --toggle-track-on-hover-rgb: 194 5 16;
+  --toggle-track-disabled-off-rgb: 245 245 245;
+  --toggle-track-disabled-on-rgb: 255 199 202;
+  --toggle-thumb-rgb: 255 255 255;
+  --toggle-thumb-disabled-rgb: 255 255 255;
+  --toggle-label-rgb: 26 26 26;
+  --toggle-label-disabled-rgb: 212 212 212;
+  --toggle-focus-ring-rgb: 227 6 19;
+  --chip-bg-rgb: 255 255 255;
+  --chip-fg-rgb: 26 26 26;
+  --chip-border-rgb: 142 142 142;
+  --chip-bg-hover-rgb: 245 245 245;
+  --chip-bg-selected-rgb: 227 6 19;
+  --chip-fg-selected-rgb: 255 255 255;
+  --chip-border-selected-rgb: 227 6 19;
+  --chip-bg-selected-hover-rgb: 194 5 16;
+  --chip-focus-ring-rgb: 227 6 19;
+  --border-neutral-rgb: 228 228 228;
+  --divider-color-rgb: 228 228 228;
+  --dropdown-bg-rgb: 255 255 255;
+  --dropdown-header-fg-rgb: 26 26 26;
+  --dropdown-header-icon-rgb: 227 6 19;
+  --dropdown-item-bg-active-rgb: 228 228 228;
+  --dropdown-item-bg-hover-rgb: 245 245 245;
+  --dropdown-item-fg-rgb: 26 26 26;
+  --dropdown-item-fg-disabled-rgb: 212 212 212;
+  --dropdown-item-icon-rgb: 82 82 82;
+  --dropdown-link-fg-rgb: 227 6 19;
+  --dropdown-link-fg-hover-rgb: 194 5 16;
+}

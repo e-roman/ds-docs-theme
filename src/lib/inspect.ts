@@ -27,8 +27,8 @@ const rgbHex = (v: string) => {
 const px = (v: string) => (parseFloat(v) % 1 === 0 ? `${parseFloat(v)}px` : `${parseFloat(v).toFixed(1)}px`)
 
 /** Todas las reglas de estilo del documento, en orden, dentro de @media/@supports/@layer aplicables. */
-function flatten(doc: Document): CSSStyleRule[] {
-  const win = doc.defaultView!
+function flatten(doc: Document | ShadowRoot): CSSStyleRule[] {
+  const win = (doc instanceof ShadowRoot ? doc.host.ownerDocument : doc).defaultView!
   const out: CSSStyleRule[] = []
   const walk = (rules: CSSRuleList) => {
     for (const r of Array.from(rules)) {
@@ -92,7 +92,8 @@ function splitTop(sel: string): string[] {
 function matching(el: Element): CSSStyleDeclaration[] {
   const found: { style: CSSStyleDeclaration; spec: number; order: number }[] = []
   let order = 0
-  for (const r of flatten(el.ownerDocument)) {
+  // dentro de un shadow root (modo aislado) solo aplican las hojas de ese shadow root
+  for (const r of flatten(el.getRootNode() as Document | ShadowRoot)) {
     order++
     let spec = -1
     for (const part of splitTop(r.selectorText)) {

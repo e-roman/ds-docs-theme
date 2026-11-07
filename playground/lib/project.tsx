@@ -3,6 +3,7 @@ import { inlinePreviews } from "ds-docs-theme/lib/previews"
 import { readTokens } from "ds-docs-theme/lib/tokens"
 import type { NavItem, NavSection, Piece } from "ds-docs-theme/types"
 import { ShoppingCart } from "lucide-react"
+import { Isolated } from "ds-docs-theme/docs/isolated"
 import { Badge } from "ds-docs-theme/ui/badge"
 import { Button } from "ds-docs-theme/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "ds-docs-theme/ui/card"
@@ -42,7 +43,30 @@ export const foundations: NavItem[] = [
   { slug: "size", title: "Size", description: "Tamaños mínimos de toque, íconos y contenedores." },
 ]
 
+/** CSS de la tienda (compilado aparte con su propio Tailwind 3): se carga solo dentro de los shadow roots. */
+const SHOP_CSS = ["/shop.css"]
+
 export const pieces: Piece[] = [
+  {
+    slug: "shop-button", group: "components", title: "Botón de la tienda (aislado)", file: "components/ui/button.tsx",
+    description: "Botón real de la tienda con su CSS propio (Tailwind 3), aislado en un shadow root: no se mezcla con el CSS del theme.",
+    docsId: "",
+    anatomy: {
+      story: "shop-button",
+      parts: [
+        { n: 1, label: "Contenedor", selector: ".btn", side: "top" },
+        { n: 2, label: "Etiqueta", selector: ".btn span", side: "bottom" },
+      ],
+      node: <Isolated css={SHOP_CSS}><button className="btn btn--primary btn--lg"><span>Comprar ahora</span></button></Isolated>,
+    },
+    stories: [
+      { label: "Primario", id: "shop-primary", node: <Isolated css={SHOP_CSS}><div className="row row--wrap gap-3x"><button className="btn btn--primary btn--lg">Comprar ahora</button><button className="btn btn--add-to-cart btn--md">Agregar</button></div></Isolated> },
+      { label: "Secundarios", id: "shop-secondary", node: <Isolated css={SHOP_CSS}><div className="row row--wrap gap-3x"><button className="btn btn--secondary btn--md">Secundario</button><button className="btn btn--outline btn--lg">Outline</button><button className="btn btn--neutral btn--lg">Neutral</button></div></Isolated> },
+    ],
+    props: [["variant", "primary | add-to-cart | secondary | outline | neutral", "Jerarquía del botón (clase btn--*)."]],
+    use: ["Para acciones de la tienda con el estilo real del sitio."],
+    avoid: ["Mezclar este botón con los del theme: son sistemas de diseño distintos."],
+  },
   {
     slug: "button", group: "components", title: "Button", file: "src/button.tsx",
     description: "Acción principal o secundaria de una pantalla.",

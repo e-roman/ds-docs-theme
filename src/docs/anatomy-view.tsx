@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState, type ReactNode } from "react"
 import { Loader2 } from "lucide-react"
 import { FRAME_CSS, openInspection, useActiveKey } from "./inspector"
+import { queryDeep } from "../lib/dom"
 import type { Anatomy } from "../types"
 
 type Mark = { n: number; x: number; y: number; line: { left: number; top: number; width: number; height: number } }
@@ -80,7 +81,7 @@ function InlineAnatomy({ node, anatomy }: { node: ReactNode; anatomy: Anatomy })
     const bb = b.getBoundingClientRect()
     const next: Mark[] = []
     for (const p of anatomy.parts) {
-      const target = r0.querySelector(p.selector)
+      const target = queryDeep(r0, p.selector)
       if (!target) continue
       const r = target.getBoundingClientRect()
       if (r.width === 0 && r.height === 0) continue
@@ -106,7 +107,7 @@ function InlineAnatomy({ node, anatomy }: { node: ReactNode; anatomy: Anatomy })
 
   const inspectPart = (n: number) => {
     const p = anatomy.parts.find((x) => x.n === n)
-    const target = p && root.current?.querySelector(p.selector)
+    const target = p && root.current && queryDeep(root.current, p.selector)
     if (p && target) void openInspection(target, p.label, `${uid}:${n}`)
   }
 

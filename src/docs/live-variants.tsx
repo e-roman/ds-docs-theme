@@ -187,17 +187,23 @@ function InlineStage({ node, inspecting }: { node: ReactNode; inspecting: boolea
   useEffect(() => {
     const root = ref.current
     if (!root || !inspecting) return
-    const clear = () => root.querySelectorAll("[data-insp-hover]").forEach((n) => n.removeAttribute("data-insp-hover"))
+    // con el modo aislado el elemento real está dentro de un shadow root: el evento llega «retargeteado», el verdadero origen está en composedPath()
+    const real = (e: Event) => (e.composedPath()[0] ?? e.target) as Element
+    let last: Element | null = null
+    const clear = () => { last?.removeAttribute("data-insp-hover"); last = null }
     const over = (e: Event) => {
       clear()
-      const t = e.target as Element
-      if (t !== root) t.setAttribute("data-insp-hover", "")
+      const t = real(e)
+      if (t !== root && t.nodeType === 1 && !t.hasAttribute("data-isolated-root") && !(t as HTMLElement).shadowRoot) {
+        t.setAttribute("data-insp-hover", "")
+        last = t
+      }
     }
     const click = async (e: Event) => {
-      const t = e.target as Element
+      const t = real(e)
       e.preventDefault()
       e.stopPropagation()
-      if (t !== root) await openInspection(t)
+      if (t !== root && t.nodeType === 1 && !t.hasAttribute("data-isolated-root") && !(t as HTMLElement).shadowRoot) await openInspection(t)
     }
     root.addEventListener("mouseover", over, true)
     root.addEventListener("mouseleave", clear)

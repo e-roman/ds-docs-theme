@@ -28,6 +28,16 @@ El playground (`playground/`) es un proyecto de ejemplo: su data vive en `playgr
 - **`inline`** (`inlinePreviews`): el componente real se dibuja en la caja; cada vista trae su `node`. Rápido.
 - **`storybook`** (`storybookPreviews`): iframes a un Storybook publicado, con inspector y anatomía. Para proyectos con CSS global que no se puede mezclar con la documentación.
 
+### Modo aislado (shadow DOM)
+
+Cuando el CSS del proyecto no se puede mezclar con el del theme (por ejemplo, una tienda con su propio Tailwind 3), cada vista se envuelve en `<Isolated css={["/shop.css"]}>` (`docs/isolated`):
+
+- El CSS del proyecto se compila aparte y se carga **solo dentro del shadow root**; no pisa al theme ni al revés.
+- Los tokens (variables CSS en `:root`) y las fuentes cargadas en la página sí llegan adentro: deben estar a nivel documento.
+- Los hijos son componentes de React normales (eventos y estado funcionan).
+- Inspeccionar y Anatomía leen dentro del shadow root, incluido el rastreo de tokens. Ver la pieza «Botón de la tienda (aislado)» del playground.
+- En `html`/`body` del CSS del proyecto no hay efecto dentro de un shadow root: esos estilos pasan a `:host`.
+
 ## Usarlo en un proyecto
 
 1. Instalar el paquete y agregar `transpilePackages: ["ds-docs-theme"]` en `next.config`.
