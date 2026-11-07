@@ -115,14 +115,14 @@ export function WhenToUse({ use, avoid }: { use: string[]; avoid: string[] }) {
 }
 
 /** Tarjetas «sí / no» con un preview (una story de Storybook) y el motivo. */
-export function DoDont({ items }: { items: { ok: boolean; title: string; text?: string; storyId: string; src: string }[] }) {
+export function DoDont({ items }: { items: { ok: boolean; title: string; text?: string; storyId: string; src: string; node?: React.ReactNode }[] }) {
   return (
     <div className="grid gap-6 sm:grid-cols-2">
       {items.map((it) => (
         <figure key={it.title}>
           <div className="relative overflow-hidden rounded-2xl border bg-white p-4">
             <StatusIcon ok={it.ok} className="absolute right-4 top-4 z-10 size-5" />
-            <StoryPreview id={it.storyId} src={it.src} label={it.title} />
+            {it.node ? <div className="bg-muted p-4">{it.node}</div> : <StoryPreview id={it.storyId} src={it.src} label={it.title} />}
           </div>
           <figcaption className="mt-3 text-sm">
             <b>{it.title}</b>

@@ -25,8 +25,8 @@ export type Anatomy = { story: string; /** Ancho máximo del marco en px. */ wid
 export type Story = { label: string; id: string; width?: number; /** Modo «inline»: el componente ya armado, se dibuja sin iframe. */ node?: ReactNode }
 /** Cambio propio de la pieza. Lo que va entre `backticks` se muestra como código. */
 export type HistoryEntry = { date: string; text: string }
-/** Ejemplo «sí / no» con una vista previa. */
-export type Practice = { ok: boolean; title: string; text?: string; storyId: string }
+/** Ejemplo «sí / no» con una vista previa (story en iframe o `node` en modo inline). */
+export type Practice = { ok: boolean; title: string; text?: string; storyId: string; /** Modo «inline»: la vista ya armada, sin iframe. */ node?: ReactNode }
 
 export type Piece = {
   slug: string

@@ -40,7 +40,7 @@ export function PieceView({ piece, tokens, preview, links }: { piece: Piece; tok
                   <AnatomyView title={piece.title} src={preview.liveUrl(piece.anatomy.story)} anatomy={piece.anatomy} />
                 </Section>
               )}
-              <Section title="Variantes" intro="El componente real, en vivo. Con «Inspeccionar» ves las propiedades y los tokens de cada parte.">
+              <Section title="Variantes" intro={inline ? "El componente real, en vivo." : "El componente real, en vivo. Con «Inspeccionar» ves las propiedades y los tokens de cada parte."}>
                 {piece.stories.length === 0 ? (
                   <p className="text-sm text-muted-foreground">Este componente no dibuja nada en pantalla, así que no tiene vista previa.{inline ? "" : " Podés probarlo en su story de Storybook."}</p>
                 ) : (
@@ -57,7 +57,7 @@ export function PieceView({ piece, tokens, preview, links }: { piece: Piece; tok
               </Section>
               {piece.practices && piece.practices.length > 0 && (
                 <Section title="Buenas prácticas">
-                  <DoDont items={piece.practices.map((p) => ({ ok: p.ok, title: p.title, text: p.text, storyId: p.storyId, src: preview.liveUrl(p.storyId) }))} />
+                  <DoDont items={piece.practices.map((p) => ({ ok: p.ok, title: p.title, text: p.text, storyId: p.storyId, src: preview.liveUrl(p.storyId), node: p.node }))} />
                 </Section>
               )}
             </>
