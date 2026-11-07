@@ -33,9 +33,9 @@ export function DocTabs({ panels }: { panels: Partial<Record<DocTabId, ReactNode
         history.replaceState(null, "", `#${v}`)
       }}
     >
-      <TabsList variant="line" className="mb-2 border-b" aria-label="Secciones">
+      <TabsList variant="line" className="mb-2 w-full! justify-start! border-b" aria-label="Secciones">
         {tabs.map((t) => (
-          <TabsTrigger key={t.id} value={t.id} className="px-3">
+          <TabsTrigger key={t.id} value={t.id} className="flex-none! px-3">
             {t.label}
           </TabsTrigger>
         ))}

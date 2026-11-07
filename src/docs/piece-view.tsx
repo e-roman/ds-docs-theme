@@ -37,7 +37,7 @@ export function PieceView({ piece, tokens, preview, links }: { piece: Piece; tok
             <>
               {piece.anatomy && (
                 <Section title="Anatomía" intro="Cada número es una parte del componente real: hacé clic para ver sus propiedades y tokens.">
-                  <AnatomyView title={piece.title} src={preview.liveUrl(piece.anatomy.story)} anatomy={piece.anatomy} />
+                  <AnatomyView title={piece.title} src={preview.liveUrl(piece.anatomy.story)} node={piece.anatomy.node} anatomy={piece.anatomy} />
                 </Section>
               )}
               <Section title="Variantes" intro={inline ? "El componente real, en vivo." : "El componente real, en vivo. Con «Inspeccionar» ves las propiedades y los tokens de cada parte."}>

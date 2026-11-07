@@ -142,3 +142,9 @@
     @apply font-sans;
   }
 }
+/* Inspector en modo inline: la parte elegida se resalta en la misma página (en modo storybook lo hace FRAME_CSS dentro del iframe). */
+[data-insp-hover],
+[data-insp-sel] {
+  outline: 1px dashed var(--brand) !important;
+  outline-offset: 0 !important;
+}

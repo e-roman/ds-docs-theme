@@ -2,6 +2,7 @@ import path from "node:path"
 import { inlinePreviews } from "ds-docs-theme/lib/previews"
 import { readTokens } from "ds-docs-theme/lib/tokens"
 import type { NavItem, NavSection, Piece } from "ds-docs-theme/types"
+import { ShoppingCart } from "lucide-react"
 import { Badge } from "ds-docs-theme/ui/badge"
 import { Button } from "ds-docs-theme/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "ds-docs-theme/ui/card"
@@ -46,6 +47,15 @@ export const pieces: Piece[] = [
     slug: "button", group: "components", title: "Button", file: "src/button.tsx",
     description: "Acción principal o secundaria de una pantalla.",
     docsId: "",
+    anatomy: {
+      story: "button",
+      parts: [
+        { n: 1, label: "Contenedor", selector: "[data-slot=button]", side: "top" },
+        { n: 2, label: "Ícono", selector: "svg", side: "bottom", pct: 20 },
+        { n: 3, label: "Etiqueta", selector: "[data-part=label]", side: "bottom", pct: 80 },
+      ],
+      node: <Button><ShoppingCart /><span data-part="label">Agregar al carrito</span></Button>,
+    },
     stories: [
       { label: "Primario", id: "button-primary", node: <div className="flex flex-wrap gap-3"><Button>Comprar ahora</Button><Button size="sm">Pequeño</Button></div> },
       { label: "Secundario", id: "button-secondary", node: <div className="flex flex-wrap gap-3"><Button variant="secondary">Ver detalle</Button><Button variant="outline">Cancelar</Button></div> },

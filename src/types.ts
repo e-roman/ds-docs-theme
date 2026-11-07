@@ -20,7 +20,7 @@ export type Prop = [name: string, type: string, desc: string, required?: boolean
 /** Una parte del componente. `selector` se busca dentro de la story; `side` es de qué lado se dibuja el número; `pct` lo mueve a lo largo de ese borde (0–100, por defecto 50). */
 export type AnatomyPart = { n: number; label: string; selector: string; note?: string; side: "top" | "bottom" | "left" | "right"; pct?: number }
 /** Anatomía interactiva: una story de Storybook y sus partes. */
-export type Anatomy = { story: string; /** Ancho máximo del marco en px. */ width?: number; parts: AnatomyPart[] }
+export type Anatomy = { story: string; /** Ancho máximo del marco en px. */ width?: number; parts: AnatomyPart[]; /** Modo «inline»: el componente ya armado, sin iframe. Los `selector` de las partes se buscan dentro de él. */ node?: ReactNode }
 /** `width`: ancho máximo del marco en px; las stories mobile se muestran en un marco angosto. */
 export type Story = { label: string; id: string; width?: number; /** Modo «inline»: el componente ya armado, se dibuja sin iframe. */ node?: ReactNode }
 /** Cambio propio de la pieza. Lo que va entre `backticks` se muestra como código. */

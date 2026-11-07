@@ -1,6 +1,6 @@
 "use client"
 
-import { useCallback, useEffect, useRef, useState } from "react"
+import { useCallback, useEffect, useRef, useState, type ReactNode } from "react"
 import { Loader2 } from "lucide-react"
 import { FRAME_CSS, openInspection, useActiveKey } from "./inspector"
 import type { Anatomy } from "../types"
@@ -10,12 +10,123 @@ type Mark = { n: number; x: number; y: number; line: { left: number; top: number
 const GAP = 36
 const SIZE = 24
 
+/** Posición del número de una parte y su línea, a partir del rectángulo del elemento (relativo a la caja). */
+function markFor(p: Anatomy["parts"][number], left: number, top: number, width: number, height: number): Mark {
+  const f = (p.pct ?? 50) / 100
+  let x: number, y: number, line: Mark["line"]
+  if (p.side === "top" || p.side === "bottom") {
+    x = left + width * f
+    const edge = p.side === "top" ? top : top + height
+    y = p.side === "top" ? edge - GAP : edge + GAP
+    line = { left: x, top: Math.min(y, edge), width: 1, height: GAP }
+  } else {
+    y = top + height * f
+    const edge = p.side === "left" ? left : left + width
+    x = p.side === "left" ? edge - GAP : edge + GAP
+    line = { left: Math.min(x, edge), top: y, width: GAP, height: 1 }
+  }
+  return { n: p.n, x, y, line }
+}
+
+/** Números sobre el componente, unidos con una línea a su parte. */
+function MarkLayer({ marks, anatomy, uid, active, onPick }: { marks: Mark[]; anatomy: Anatomy; uid: string; active: string | null; onPick: (n: number) => void }) {
+  return marks.map((m) => (
+    <span key={m.n}>
+      <span aria-hidden className="absolute bg-foreground/50" style={m.line} />
+      <button
+        type="button"
+        aria-label={`Ver propiedades: ${anatomy.parts.find((p) => p.n === m.n)?.label}`}
+        onClick={() => onPick(m.n)}
+        className={`absolute flex cursor-pointer -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full text-xs font-bold text-background ${active === `${uid}:${m.n}` ? "bg-brand ring-4 ring-brand/30" : "bg-foreground"}`}
+        style={{ left: m.x, top: m.y, width: SIZE, height: SIZE }}
+      >
+        {m.n}
+      </button>
+    </span>
+  ))
+}
+
+/** Leyenda: una línea por parte; abre el mismo panel que el número. */
+function Legend({ anatomy, uid, active, onPick }: { anatomy: Anatomy; uid: string; active: string | null; onPick: (n: number) => void }) {
+  return (
+    <>
+      <p className="mt-2 text-xs text-muted-foreground">Hacé clic en un número para ver las propiedades y los tokens de esa parte.</p>
+      <ol className="mt-4 grid gap-x-8 gap-y-2 sm:grid-cols-2">
+        {anatomy.parts.map((p) => (
+          <li key={p.n}>
+            <button type="button" onClick={() => onPick(p.n)} className="group flex cursor-pointer items-center gap-3 text-left text-sm">
+              <b className={`flex size-6 shrink-0 items-center justify-center rounded-full text-xs text-background ${active === `${uid}:${p.n}` ? "bg-brand" : "bg-foreground"}`}>{p.n}</b>
+              <span className={`underline-offset-4 group-hover:underline ${active === `${uid}:${p.n}` ? "underline" : ""}`}>{p.label}{p.note && <span className="text-muted-foreground"> ({p.note})</span>}</span>
+            </button>
+          </li>
+        ))}
+      </ol>
+    </>
+  )
+}
+
+/** Anatomía en modo «inline»: el componente real está en la misma página (sin iframe) y las partes se buscan dentro de él. */
+function InlineAnatomy({ node, anatomy }: { node: ReactNode; anatomy: Anatomy }) {
+  const box = useRef<HTMLDivElement>(null)
+  const root = useRef<HTMLDivElement>(null)
+  const [marks, setMarks] = useState<Mark[]>([])
+  const active = useActiveKey()
+  const uid = anatomy.story
+
+  const compute = useCallback(() => {
+    const b = box.current
+    const r0 = root.current
+    if (!b || !r0) return
+    const bb = b.getBoundingClientRect()
+    const next: Mark[] = []
+    for (const p of anatomy.parts) {
+      const target = r0.querySelector(p.selector)
+      if (!target) continue
+      const r = target.getBoundingClientRect()
+      if (r.width === 0 && r.height === 0) continue
+      next.push(markFor(p, r.left - bb.left, r.top - bb.top, r.width, r.height))
+    }
+    setMarks(next)
+  }, [anatomy.parts])
+
+  useEffect(() => {
+    compute()
+    const ro = new ResizeObserver(compute)
+    if (box.current) ro.observe(box.current)
+    if (root.current) ro.observe(root.current)
+    const mo = new MutationObserver(compute)
+    if (root.current) mo.observe(root.current, { childList: true, subtree: true, attributes: true })
+    window.addEventListener("resize", compute)
+    return () => {
+      ro.disconnect()
+      mo.disconnect()
+      window.removeEventListener("resize", compute)
+    }
+  }, [compute])
+
+  const inspectPart = (n: number) => {
+    const p = anatomy.parts.find((x) => x.n === n)
+    const target = p && root.current?.querySelector(p.selector)
+    if (p && target) void openInspection(target, p.label, `${uid}:${n}`)
+  }
+
+  return (
+    <>
+      <div ref={box} className="relative rounded-xl border bg-muted px-16 py-16">
+        <div ref={root} className="mx-auto flex w-fit justify-center" style={{ maxWidth: anatomy.width ?? 480 }}>{node}</div>
+        <MarkLayer marks={marks} anatomy={anatomy} uid={uid} active={active} onPick={inspectPart} />
+      </div>
+      <Legend anatomy={anatomy} uid={uid} active={active} onPick={inspectPart} />
+    </>
+  )
+}
+
 /**
  * Anatomía interactiva: la story real en un iframe del mismo origen, con un número por parte unido al elemento con una línea.
  * Los números (y la leyenda) abren el panel con las propiedades y los tokens de esa parte. Las posiciones se miden sobre
  * el componente real, así no se descolocan si cambia de tamaño.
  */
-export function AnatomyView({ title, src, anatomy }: { title: string; src: string; anatomy: Anatomy }) {
+function FrameAnatomy({ title, src, anatomy }: { title: string; src: string; anatomy: Anatomy }) {
   const frame = useRef<HTMLIFrameElement>(null)
   const [height, setHeight] = useState(120)
   const [marks, setMarks] = useState<Mark[]>([])
@@ -132,32 +243,15 @@ export function AnatomyView({ title, src, anatomy }: { title: string; src: strin
             <Loader2 className="size-6 animate-spin text-muted-foreground" />
           </div>
         )}
-        {ready && marks.map((m) => (
-          <span key={m.n}>
-            <span aria-hidden className="absolute bg-foreground/50" style={m.line} />
-            <button
-              type="button"
-              aria-label={`Ver propiedades: ${anatomy.parts.find((p) => p.n === m.n)?.label}`}
-              onClick={() => inspectPart(m.n)}
-              className={`absolute flex cursor-pointer -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full text-xs font-bold text-background ${active === `${uid}:${m.n}` ? "bg-brand ring-4 ring-brand/30" : "bg-foreground"}`}
-              style={{ left: m.x, top: m.y, width: SIZE, height: SIZE }}
-            >
-              {m.n}
-            </button>
-          </span>
-        ))}
+        {ready && <MarkLayer marks={marks} anatomy={anatomy} uid={uid} active={active} onPick={inspectPart} />}
       </div>
-      <p className="mt-2 text-xs text-muted-foreground">Hacé clic en un número para ver las propiedades y los tokens de esa parte.</p>
-      <ol className="mt-4 grid gap-x-8 gap-y-2 sm:grid-cols-2">
-        {anatomy.parts.map((p) => (
-          <li key={p.n}>
-            <button type="button" onClick={() => inspectPart(p.n)} className="group flex cursor-pointer items-center gap-3 text-left text-sm">
-              <b className={`flex size-6 shrink-0 items-center justify-center rounded-full text-xs text-background ${active === `${uid}:${p.n}` ? "bg-brand" : "bg-foreground"}`}>{p.n}</b>
-              <span className={`underline-offset-4 group-hover:underline ${active === `${uid}:${p.n}` ? "underline" : ""}`}>{p.label}{p.note && <span className="text-muted-foreground"> ({p.note})</span>}</span>
-            </button>
-          </li>
-        ))}
-      </ol>
+      <Legend anatomy={anatomy} uid={uid} active={active} onPick={inspectPart} />
     </>
   )
+}
+
+/** Anatomía interactiva. Con `node` (modo inline) el componente se dibuja en la página; con `src`, la story va en un iframe. */
+export function AnatomyView({ title, src, node, anatomy }: { title: string; src?: string; node?: ReactNode; anatomy: Anatomy }) {
+  if (node) return <InlineAnatomy node={node} anatomy={anatomy} />
+  return <FrameAnatomy title={title} src={src ?? ""} anatomy={anatomy} />
 }
