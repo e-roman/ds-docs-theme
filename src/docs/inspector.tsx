@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState, useSyncExternalStore } from "react"
 import { X } from "lucide-react"
 import { Button } from "../ui/button"
-import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip"
+import { Copyable } from "./copyable"
 import { inspect, loadTokens, type GroupKey, type Inspection, type Row } from "../lib/inspect"
 
 /* Una sola inspección abierta en toda la página: la usan las vistas en vivo y la anatomía. */
@@ -51,47 +51,9 @@ const SECTIONS: { title: string; keys: GroupKey[] }[] = [
   { title: "Tipografía", keys: ["tipografia"] },
 ]
 
-/** Token que se copia como `var(--nombre)`: muestra «Copiar» al pasar el mouse y «Copiado» al copiar. */
+/** Token que se copia como `var(--nombre)`. */
 function Chip({ name }: { name: string }) {
-  const [open, setOpen] = useState(false)
-  const [copied, setCopied] = useState(false)
-  const hovered = useRef(false)
-  const keep = useRef(false)
-
-  const copy = async () => {
-    try {
-      await navigator.clipboard.writeText(`var(--${name})`)
-    } catch {
-      return
-    }
-    setCopied(true)
-    setOpen(true)
-    keep.current = true
-    setTimeout(() => {
-      keep.current = false
-      setCopied(false)
-      if (!hovered.current) setOpen(false)
-    }, 1200)
-  }
-
-  return (
-    <Tooltip open={open} onOpenChange={(o) => { if (!o && keep.current) return; setOpen(o) }}>
-      <TooltipTrigger
-        render={
-          <button
-            type="button"
-            onClick={copy}
-            onMouseEnter={() => { hovered.current = true }}
-            onMouseLeave={() => { hovered.current = false }}
-            className="cursor-pointer rounded bg-muted px-1.5 py-0.5 font-mono text-xs hover:bg-accent"
-          />
-        }
-      >
-        {name}
-      </TooltipTrigger>
-      <TooltipContent side="top">{copied ? "Copiado" : "Copiar"}</TooltipContent>
-    </Tooltip>
-  )
+  return <Copyable text={`var(--${name})`} className="rounded bg-muted px-1.5 py-0.5 font-mono text-xs hover:bg-accent">{name}</Copyable>
 }
 
 function RowView({ r }: { r: Row }) {

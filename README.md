@@ -33,3 +33,4 @@ El playground (`playground/`) es un proyecto de ejemplo: su data vive en `playgr
 1. Instalar el paquete y agregar `transpilePackages: ["ds-docs-theme"]` en `next.config`.
 2. En `globals.css`: `@import "ds-docs-theme/theme.css";`
 3. Montar las páginas como en `playground/app/`.
+4. Envolver el layout con `TooltipProvider` (lo usan el copiado de tokens y el inspector).

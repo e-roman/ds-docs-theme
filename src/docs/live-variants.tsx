@@ -180,6 +180,39 @@ function LiveFrame({ item, inspecting }: { item: LiveItem; inspecting: boolean }
   )
 }
 
+/** Vista en modo inline: el componente real en la misma página. Con «Inspeccionar» resalta la parte bajo el mouse y, al hacer clic, abre el panel (sin activar el componente). */
+function InlineStage({ node, inspecting }: { node: ReactNode; inspecting: boolean }) {
+  const ref = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const root = ref.current
+    if (!root || !inspecting) return
+    const clear = () => root.querySelectorAll("[data-insp-hover]").forEach((n) => n.removeAttribute("data-insp-hover"))
+    const over = (e: Event) => {
+      clear()
+      const t = e.target as Element
+      if (t !== root) t.setAttribute("data-insp-hover", "")
+    }
+    const click = async (e: Event) => {
+      const t = e.target as Element
+      e.preventDefault()
+      e.stopPropagation()
+      if (t !== root) await openInspection(t)
+    }
+    root.addEventListener("mouseover", over, true)
+    root.addEventListener("mouseleave", clear)
+    root.addEventListener("click", click, true)
+    return () => {
+      root.removeEventListener("mouseover", over, true)
+      root.removeEventListener("mouseleave", clear)
+      root.removeEventListener("click", click, true)
+      clear()
+    }
+  }, [inspecting])
+
+  return <div ref={ref} className="overflow-x-auto">{node}</div>
+}
+
 /** Story en vivo sin inspector: para ejemplos «sí / no» y vistas sueltas. */
 export function StoryPreview({ id, src, label, width }: { id: string; src: string; label: string; width?: number }) {
   return (
@@ -209,27 +242,25 @@ export function LiveVariants({ title, items }: { title: string; items: LiveItem[
             <span className="text-sm font-medium">{cur.label}</span>
           )}
           <div className="flex items-center gap-2">
-            {!cur.node && (
-              <Button variant={inspecting ? "default" : "outline"} size="sm" aria-pressed={inspecting} onClick={() => { setInspecting(!inspecting); closeInspection() }}>
-                <MousePointerClick /> Inspeccionar
-              </Button>
-            )}
+            <Button variant={inspecting ? "default" : "outline"} size="sm" aria-pressed={inspecting} onClick={() => { setInspecting(!inspecting); closeInspection() }}>
+              <MousePointerClick /> Inspeccionar
+            </Button>
           </div>
         </div>
         <div className="bg-muted p-6">
-          {cur.node ? <div className="overflow-x-auto">{cur.node}</div> : <LiveFrame item={cur} inspecting={inspecting} />}
+          {cur.node ? <InlineStage node={cur.node} inspecting={inspecting} /> : <LiveFrame item={cur} inspecting={inspecting} />}
         </div>
       </div>
-      {!cur.node && (
       <div className="mt-2 flex items-start justify-between gap-4">
         <p className="text-xs text-muted-foreground">
-          {inspecting ? "Hacé clic en una parte del componente para ver sus propiedades y tokens." : "Componente real de la tienda, publicado en Storybook."}
+          {inspecting ? "Hacé clic en una parte del componente para ver sus propiedades y tokens." : cur.node ? "" : "Componente real de la tienda, publicado en Storybook."}
         </p>
-        <a href={cur.href} target="_blank" rel="noopener noreferrer" className="inline-flex shrink-0 items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground">
-          Abrir en Storybook <ExternalLink className="size-3.5" aria-hidden />
-        </a>
+        {!cur.node && (
+          <a href={cur.href} target="_blank" rel="noopener noreferrer" className="inline-flex shrink-0 items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground">
+            Abrir en Storybook <ExternalLink className="size-3.5" aria-hidden />
+          </a>
+        )}
       </div>
-      )}
     </>
   )
 }

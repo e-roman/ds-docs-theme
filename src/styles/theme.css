@@ -148,3 +148,6 @@
   outline: 1px dashed var(--brand) !important;
   outline-offset: 0 !important;
 }
+[data-insp-hover] {
+  cursor: pointer !important;
+}
