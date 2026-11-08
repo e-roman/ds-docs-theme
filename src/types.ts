@@ -13,7 +13,7 @@ export type Token = {
 }
 
 /** Entrada del menú lateral de una sección. */
-export type NavItem = { slug: string; title: string; description: string; cat?: string }
+export type NavItem = { slug: string; title: string; description: string; cat?: string; /** Ilustración de la tarjeta del índice; por defecto `/illustrations/<grupo>/<slug>.svg`. */ image?: string }
 
 /** Sección con menú lateral (Foundations, Componentes, Patrones…). */
 export type NavSection = { key: string; label: string; base: string; items: NavItem[] }

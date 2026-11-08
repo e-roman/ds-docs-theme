@@ -217,7 +217,7 @@ function InlineStage({ node, inspecting }: { node: ReactNode; inspecting: boolea
     }
   }, [inspecting])
 
-  return <div ref={ref} className="overflow-x-auto">{node}</div>
+  return <div ref={ref} className="w-full overflow-x-auto">{node}</div>
 }
 
 /** Story en vivo sin inspector: para ejemplos «sí / no» y vistas sueltas. */
@@ -254,7 +254,7 @@ export function LiveVariants({ title, items }: { title: string; items: LiveItem[
             </Button>
           </div>
         </div>
-        <div className={`p-6 ${cur.dark ? "bg-neutral-800" : "bg-muted"}`}>
+        <div className={`flex min-h-[260px] items-center p-6 ${cur.dark ? "bg-neutral-800" : "bg-muted"}`}>
           {cur.node ? <InlineStage node={cur.node} inspecting={inspecting} /> : <LiveFrame item={cur} inspecting={inspecting} />}
         </div>
       </div>

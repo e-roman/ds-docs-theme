@@ -66,7 +66,7 @@ export function SectionIndex({ title, intro, base, group, items }: { title: stri
             <Link href={`${base}/${i.slug}`} className="group block rounded-2xl outline-none focus-visible:ring-3 focus-visible:ring-ring/50">
               <div aria-hidden className="grid aspect-[7/5] place-items-center rounded-2xl bg-muted transition-colors group-hover:bg-muted/60">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={`/illustrations/${group}/${i.slug}.svg`} alt="" width={120} height={120} className="size-28" />
+                <img src={i.image ?? `/illustrations/${group}/${i.slug}.svg`} alt="" width={120} height={120} className="size-28" />
               </div>
               <span className="mt-3 flex items-center justify-between text-sm font-semibold">
                 {i.title}
@@ -122,7 +122,7 @@ export function DoDont({ items }: { items: { ok: boolean; title: string; text?: 
         <figure key={it.title}>
           <div className="relative overflow-hidden rounded-2xl border bg-white p-4">
             <StatusIcon ok={it.ok} className="absolute right-4 top-4 z-10 size-5" />
-            {it.node ? <div className="bg-muted p-4">{it.node}</div> : <StoryPreview id={it.storyId} src={it.src} label={it.title} />}
+            {it.node ? <div className="flex items-center justify-center bg-muted p-4">{it.node}</div> : <StoryPreview id={it.storyId} src={it.src} label={it.title} />}
           </div>
           <figcaption className="mt-3 text-sm">
             <b>{it.title}</b>

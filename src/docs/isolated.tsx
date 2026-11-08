@@ -7,6 +7,8 @@ import { createPortal } from "react-dom"
 const INSPECT_CSS = `
 [data-insp-hover], [data-insp-sel] { outline: 1px dashed var(--brand, #385dbe) !important; outline-offset: 0 !important; }
 [data-insp-hover] { cursor: pointer !important; }
+/* el contenido va centrado en su caja (los hijos con ancho 100% siguen ocupando todo el ancho) */
+[data-isolated-root] { display: flex; justify-content: center; align-items: center; }
 `
 
 /**
@@ -56,7 +58,7 @@ export function Isolated({ css, children, className }: { css: string[]; children
   }, [key])
 
   return (
-    <div ref={host} className={`transition-opacity duration-150 ${ready ? "opacity-100" : "opacity-0"} ${className ?? ""}`}>
+    <div ref={host} className={`w-full transition-opacity duration-150 ${ready ? "opacity-100" : "opacity-0"} ${className ?? ""}`}>
       {mount && createPortal(children, mount)}
     </div>
   )

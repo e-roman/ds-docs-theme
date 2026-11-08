@@ -113,7 +113,7 @@ function InlineAnatomy({ node, anatomy }: { node: ReactNode; anatomy: Anatomy })
 
   return (
     <>
-      <div ref={box} className="relative rounded-xl border bg-muted px-16 py-16">
+      <div ref={box} className="relative flex min-h-[260px] items-center justify-center rounded-xl border bg-muted px-16 py-16">
         <div ref={root} className="mx-auto flex w-fit justify-center" style={{ maxWidth: anatomy.width ?? 480 }}>{node}</div>
         <MarkLayer marks={marks} anatomy={anatomy} uid={uid} active={active} onPick={inspectPart} />
       </div>
@@ -228,7 +228,7 @@ function FrameAnatomy({ title, src, anatomy }: { title: string; src: string; ana
 
   return (
     <>
-      <div className="relative rounded-xl border bg-muted px-16 py-16">
+      <div className="relative flex min-h-[260px] items-center justify-center rounded-xl border bg-muted px-16 py-16">
         <iframe
           ref={frame}
           title={`Anatomía de ${title}`}
