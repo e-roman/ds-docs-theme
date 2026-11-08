@@ -82,7 +82,7 @@ export function PieceView({ piece, tokens, preview, links }: { piece: Piece; tok
               )}
               {piece.tokenPrefixes && piece.tokenPrefixes.length > 0 && (
                 <Section title="Tokens" intro="Se leen en vivo del paquete de tokens.">
-                  {piece.tokenPrefixes.map((p) => <TokenTable key={p} tokens={withPrefix(tokens, p)} prefix={p} />)}
+                  {piece.tokenPrefixes.map((p) => <TokenTable key={p} tokens={withPrefix(tokens, p)} prefix={p} group={piece.tokenGroup} />)}
                 </Section>
               )}
               {extrasFor(piece, "design")}

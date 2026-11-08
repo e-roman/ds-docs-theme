@@ -60,6 +60,8 @@ export type Piece = {
   purpose?: Purpose[]
   /** Prefijos de tokens de la pieza (ej. `button-`): se listan en la sección «Tokens», leídos en vivo. */
   tokenPrefixes?: string[]
+  /** Columna extra en la tabla de tokens de la sección «Tokens» (ej. «Variante»): `of` recibe el nombre del token y devuelve el texto de la celda. */
+  tokenGroup?: { title: string; of: (tokenName: string) => string }
   /** Encabezado de la primera columna del historial (por defecto «Fecha»; puede ser «Versión de tokens»). */
   historyColumn?: string
   /** Texto corto para menús y tarjetas del índice; si falta se usa `description`. */

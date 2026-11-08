@@ -43,7 +43,7 @@ type V = { tokens: Token[]; options?: FoundationOptions }
 const Swatch = ({ color }: { color: string }) => <span className="inline-block size-8 shrink-0 rounded-md border" style={{ background: color }} />
 
 /** Tabla genérica: muestra, nombre del token (copiable), valor resuelto y a qué apunta. */
-export function TokenTable({ tokens, prefix, sample, wide }: { tokens: Token[]; prefix?: string; sample?: (t: Token) => React.ReactNode; /** Muestra ancha: las columnas se reparten solas en vez de tener ancho fijo. */ wide?: boolean }) {
+export function TokenTable({ tokens, prefix, sample, wide, group }: { tokens: Token[]; prefix?: string; sample?: (t: Token) => React.ReactNode; /** Muestra ancha: las columnas se reparten solas en vez de tener ancho fijo. */ wide?: boolean; /** Columna inicial que agrupa los tokens (ej. «Variante»). */ group?: { title: string; of: (tokenName: string) => string } }) {
   // si los tokens traen descripción se muestra «Uso»; si no, a qué token apuntan («Referencia»)
   const hasDesc = tokens.some((t) => t.desc)
   // la última columna solo aparece si hay algo que decir: una descripción o un alias (valor distinto del resuelto)
@@ -53,6 +53,7 @@ export function TokenTable({ tokens, prefix, sample, wide }: { tokens: Token[]; 
     <Table className={wide ? "" : "table-fixed"}>
       <TableHeader>
         <TableRow>
+          {group && <TableHead className={wide ? "min-w-28" : "w-32"}>{group.title}</TableHead>}
           {sample && <TableHead className={wide ? "" : "w-24"}>Muestra</TableHead>}
           <TableHead className={wide ? "min-w-48" : sample ? "w-[36%]" : "w-[40%]"}>Token</TableHead>
           <TableHead className={wide ? "min-w-36" : sample ? "w-[18%]" : "w-[20%]"}>Valor</TableHead>
@@ -62,6 +63,7 @@ export function TokenTable({ tokens, prefix, sample, wide }: { tokens: Token[]; 
       <TableBody>
         {tokens.map((t) => (
           <TableRow key={t.name}>
+            {group && <TableCell className="whitespace-normal! text-sm">{group.of(t.name)}</TableCell>}
             {sample && <TableCell className="whitespace-normal!">{sample(t)}</TableCell>}
             <TableCell className="whitespace-normal!"><CopyToken name={t.name} label={prefix ? `--${prefix}${rest(t, prefix)}` : undefined} /></TableCell>
             <TableCell className="font-mono text-xs whitespace-normal! break-all">{t.resolved}</TableCell>
