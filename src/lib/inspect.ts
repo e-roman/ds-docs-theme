@@ -135,12 +135,44 @@ function follow(name: string, tokens: TokenMap): string[] {
 }
 
 /** Resuelve una variable usada por una regla: si es un token, sigue su cadena; si es local (--bs-btn-bg), busca su declaración. */
-function resolve(name: string, rules: CSSStyleDeclaration[], tokens: TokenMap, depth = 0): string[][] {
+function resolve(name: string, rules: CSSStyleDeclaration[], tokens: TokenMap, up?: (name: string) => string | null, depth = 0): string[][] {
   if (tokens[name]) return [follow(name, tokens)]
   if (depth > 6) return []
-  const text = declared(rules, ["--" + name])
+  // una variable local (--stepper-btn-w) puede definirla un contenedor: las variables CSS se heredan
+  const text = declared(rules, ["--" + name]) ?? up?.(name) ?? null
   if (!text) return []
-  return varNames(text).flatMap((n) => resolve(n, rules, tokens, depth + 1))
+  return varNames(text).flatMap((n) => resolve(n, rules, tokens, up, depth + 1))
+}
+
+/** Valores que no son un valor propio: el elemento toma lo de su contenedor. */
+const KEYWORD = /^(inherit|currentcolor|unset|initial|revert)$/i
+/** Propiedades que en CSS se heredan solas. */
+const INHERITING: GroupKey[] = ["texto", "tipografia"]
+/** Medidas relativas al contenedor (`height: 100%`): su valor sale del contenedor. */
+const PERCENT = /^[0-9.]+%$/
+const SIZES: GroupKey[] = ["alto", "ancho"]
+
+/** Reglas `:host` del shadow root (la tienda pone ahí el color y la fuente base de lo que se muestra). */
+function hostRules(root: ShadowRoot): CSSStyleDeclaration[] {
+  return flatten(root).filter((r) => splitTop(r.selectorText).some((p) => p.trim().startsWith(":host"))).map((r) => r.style)
+}
+
+/**
+ * Cadenas de tokens de una propiedad heredada: sube por los contenedores hasta la regla que la declara con un token.
+ * Al llegar al borde de un shadow root mira sus reglas `:host`.
+ */
+function inheritedChains(el: Element, props: string[], tokens: TokenMap, rulesOf: (e: Element) => CSSStyleDeclaration[], up: (name: string) => string | null): string[][] {
+  const find = (rules: CSSStyleDeclaration[]) => {
+    const texts = props.map((n) => declared(rules, [n])).filter((t): t is string => !!t && !KEYWORD.test(t.trim()) && !PERCENT.test(t.trim()))
+    return texts.flatMap((t) => varNames(t).flatMap((n) => resolve(n, rules, tokens, up)))
+  }
+  let cur: Element | null = el.parentElement
+  for (let depth = 0; cur && depth < 16; depth++, cur = cur.parentElement) {
+    const found = find(rulesOf(cur))
+    if (found.length) return found
+  }
+  const root = el.getRootNode()
+  return root instanceof ShadowRoot ? find(hostRules(root)) : []
 }
 
 const GROUPS: { key: GroupKey; label: string; props: string[] }[] = [
@@ -169,10 +201,26 @@ function restingColors(el: Element) {
   return res
 }
 
-export function inspect(el: Element, tokens: TokenMap, title?: string): Inspection {
+/** El elemento tiene texto propio (no solo hijos): si no, la tipografía no le corresponde (ej. un botón que solo tiene un ícono). */
+const hasOwnText = (el: Element) => Array.from(el.childNodes).some((n) => n.nodeType === 3 && (n.textContent ?? "").trim() !== "")
+
+/** `only` limita los grupos que se muestran (una parte de la anatomía solo enseña lo que le corresponde); sin él se muestra todo salvo el ancho. */
+export function inspect(el: Element, tokens: TokenMap, title?: string, only?: GroupKey[]): Inspection {
   const cs = el.ownerDocument.defaultView!.getComputedStyle(el)
   const rest = restingColors(el)
-  const rules = matching(el)
+  const cache = new Map<Element, CSSStyleDeclaration[]>()
+  const rulesOf = (e: Element) => cache.get(e) ?? (cache.set(e, matching(e)), cache.get(e)!)
+  /** Valor de una variable local declarada en algún contenedor (o en el `:host` del shadow root). */
+  const up = (name: string): string | null => {
+    let cur = el.parentElement
+    for (let d = 0; cur && d < 16; d++, cur = cur.parentElement) {
+      const t = declared(rulesOf(cur), ["--" + name])
+      if (t) return t
+    }
+    const root = el.getRootNode()
+    return root instanceof ShadowRoot ? declared(hostRules(root), ["--" + name]) : null
+  }
+  const rules = rulesOf(el)
   const rows: Row[] = []
 
   const value = (key: GroupKey): string | null => {
@@ -194,17 +242,25 @@ export function inspect(el: Element, tokens: TokenMap, title?: string): Inspecti
   }
 
   for (const g of GROUPS) {
-    if (g.key === "ancho") continue
+    if (only ? !only.includes(g.key) : g.key === "ancho") continue
+    if (!only && g.key === "tipografia" && !hasOwnText(el)) continue
     const v = value(g.key)
     if (v === null) continue
     // Cada propiedad por separado (font-size, line-height, font-weight…): se unen los tokens de todas.
-    const texts = g.props.map((n) => declared(rules, [n])).filter((t): t is string => !!t)
+    // «inherit» y «currentColor» no son un valor propio: cuentan como heredado.
+    const declaredTexts = g.props.map((n) => declared(rules, [n])).filter((t): t is string => !!t)
+    const texts = declaredTexts.filter((t) => !KEYWORD.test(t.trim()) && !PERCENT.test(t.trim()))
+    const inherited = texts.length === 0
+    let found = texts.flatMap((t) => varNames(t).flatMap((n) => resolve(n, rules, tokens, up)))
+    // Sin valor propio: la propiedad se hereda (color, tipografía) o es relativa al contenedor (`height: 100%`). Se rastrea el token ahí.
+    const viaParent = INHERITING.includes(g.key) || (SIZES.includes(g.key) && declaredTexts.some((t) => PERCENT.test(t.trim())))
+    if (inherited && viaParent) found = inheritedChains(el, g.props, tokens, rulesOf, up)
     const seen = new Set<string>()
-    const chains = texts.flatMap((t) => varNames(t).flatMap((n) => resolve(n, rules, tokens))).filter((c) => {
+    const chains = found.filter((c) => {
       const k = c.join(">")
       return seen.has(k) ? false : (seen.add(k), true)
     })
-    rows.push({ key: g.key, label: g.label, value: v, chains, inherited: texts.length === 0 })
+    rows.push({ key: g.key, label: g.label, value: v, chains, inherited })
   }
 
   const cls = (el.getAttribute("class") ?? "").split(/\s+/).filter((c) => c && !c.startsWith("data-insp"))[0]

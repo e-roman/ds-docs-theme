@@ -28,12 +28,12 @@ html, body { background: #f5f5f5 !important; }
 `
 
 /** Abre (o cambia) la inspección de un elemento. `key` identifica la fuente (por ejemplo el número de la anatomía) para resaltarla. */
-export async function openInspection(el: Element, title?: string, key?: string) {
+export async function openInspection(el: Element, title?: string, key?: string, only?: GroupKey[]) {
   const tokens = await loadTokens()
   state.el?.removeAttribute("data-insp-sel")
   el.removeAttribute("data-insp-hover")
   el.setAttribute("data-insp-sel", "")
-  set({ data: inspect(el, tokens, title), key: key ?? null, el })
+  set({ data: inspect(el, tokens, title, only), key: key ?? null, el })
 }
 
 export function closeInspection() {
@@ -56,6 +56,14 @@ function Chip({ name }: { name: string }) {
   return <Copyable text={`var(--${name})`} className="rounded bg-muted px-1.5 py-0.5 font-mono text-xs hover:bg-accent">{name}</Copyable>
 }
 
+/** Qué decir cuando no hay token: de dónde sale el valor en cada caso. */
+function noTokenNote(r: Row): string {
+  if (!r.inherited) return "valor fijo, sin token"
+  if (r.key === "texto" || r.key === "tipografia") return "heredado del contenedor"
+  if (r.key === "alto" || r.key === "ancho") return "según su contenido"
+  return "valor por defecto del navegador"
+}
+
 function RowView({ r }: { r: Row }) {
   return (
     <div className="space-y-1.5 border-t px-4 py-3 first:border-t-0">
@@ -64,9 +72,10 @@ function RowView({ r }: { r: Row }) {
         <span className="text-sm font-normal">{r.value}</span>
       </div>
       {r.chains.length === 0 ? (
-        <p className="text-xs text-muted-foreground">{r.inherited ? "heredado del contenedor" : "valor fijo, sin token"}</p>
+        <p className="text-xs text-muted-foreground">{noTokenNote(r)}</p>
       ) : (
         <div className="flex flex-col items-end gap-1">
+          {r.inherited && <p className="text-xs text-muted-foreground">heredado del contenedor</p>}
           {r.chains.map((c, i) => (
             <span key={i} className="flex flex-wrap items-center justify-end gap-1">
               {c.map((n, j) => (

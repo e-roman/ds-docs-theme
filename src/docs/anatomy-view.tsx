@@ -108,7 +108,7 @@ function InlineAnatomy({ node, anatomy }: { node: ReactNode; anatomy: Anatomy })
   const inspectPart = (n: number) => {
     const p = anatomy.parts.find((x) => x.n === n)
     const target = p && root.current && queryDeep(root.current, p.selector)
-    if (p && target) void openInspection(target, p.label, `${uid}:${n}`)
+    if (p && target) void openInspection(target, p.label, `${uid}:${n}`, p.only)
   }
 
   return (
@@ -223,7 +223,7 @@ function FrameAnatomy({ title, src, anatomy }: { title: string; src: string; ana
   const inspectPart = (n: number) => {
     const p = anatomy.parts.find((x) => x.n === n)
     const target = p && frame.current?.contentDocument?.getElementById("storybook-root")?.querySelector(p.selector)
-    if (p && target) void openInspection(target, p.label, `${uid}:${n}`)
+    if (p && target) void openInspection(target, p.label, `${uid}:${n}`, p.only)
   }
 
   return (
