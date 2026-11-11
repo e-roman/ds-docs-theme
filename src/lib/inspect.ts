@@ -249,11 +249,15 @@ export function inspect(el: Element, tokens: TokenMap, title?: string, only?: Gr
     // Cada propiedad por separado (font-size, line-height, font-weight…): se unen los tokens de todas.
     // «inherit» y «currentColor» no son un valor propio: cuentan como heredado.
     const declaredTexts = g.props.map((n) => declared(rules, [n])).filter((t): t is string => !!t)
-    const texts = declaredTexts.filter((t) => !KEYWORD.test(t.trim()) && !PERCENT.test(t.trim()))
+    // un porcentaje solo es «del contenedor» en alto y ancho; en un radio (`50%`) es un valor propio
+    const relative = (t: string) => SIZES.includes(g.key) && PERCENT.test(t.trim())
+    const texts = declaredTexts.filter((t) => !KEYWORD.test(t.trim()) && !relative(t))
     const inherited = texts.length === 0
+    // alto y ancho sin regla propia salen del contenido: sin `only` no aportan nada
+    if (!only && SIZES.includes(g.key) && inherited && !declaredTexts.some(relative)) continue
     let found = texts.flatMap((t) => varNames(t).flatMap((n) => resolve(n, rules, tokens, up)))
     // Sin valor propio: la propiedad se hereda (color, tipografía) o es relativa al contenedor (`height: 100%`). Se rastrea el token ahí.
-    const viaParent = INHERITING.includes(g.key) || (SIZES.includes(g.key) && declaredTexts.some((t) => PERCENT.test(t.trim())))
+    const viaParent = INHERITING.includes(g.key) || declaredTexts.some(relative)
     if (inherited && viaParent) found = inheritedChains(el, g.props, tokens, rulesOf, up)
     const seen = new Set<string>()
     const chains = found.filter((c) => {
