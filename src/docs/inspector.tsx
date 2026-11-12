@@ -20,12 +20,18 @@ const subscribe = (l: () => void) => {
 }
 const empty: State = { data: null, key: null, el: null }
 
-/** Estilos que se inyectan en las stories embebidas: fondo gris claro (el mismo del bloque, `color-neutral-100`) y resaltado de la parte elegida. */
-export const FRAME_CSS = `
-html, body { background: #f5f5f5 !important; }
+/**
+ * Estilos que se inyectan en las stories embebidas (iframe): el fondo de la caja del proyecto (`--doc-stage`, por defecto gris claro)
+ * y el resaltado de la parte elegida.
+ */
+export const frameCss = () => {
+  const stage = (typeof document !== "undefined" && getComputedStyle(document.documentElement).getPropertyValue("--doc-stage").trim()) || "#f5f5f5"
+  return `
+html, body { background: ${stage} !important; }
 [data-insp-hover], [data-insp-sel] { outline: 1px dashed #385DBE !important; outline-offset: 0 !important; }
 [data-insp-hover] { cursor: pointer !important; }
 `
+}
 
 /** Abre (o cambia) la inspección de un elemento. `key` identifica la fuente (por ejemplo el número de la anatomía) para resaltarla. */
 export async function openInspection(el: Element, title?: string, key?: string, only?: GroupKey[]) {

@@ -122,7 +122,7 @@ export function DoDont({ items }: { items: { ok: boolean; title: string; text?: 
         <figure key={it.title}>
           <div className="relative overflow-hidden rounded-2xl border bg-white p-4">
             <StatusIcon ok={it.ok} className="absolute right-4 top-4 z-10 size-5" />
-            {it.node ? <div className="flex items-center justify-center bg-muted p-4 transition-opacity duration-150 has-[[data-isolated=pending]]:opacity-0">{it.node}</div> : <StoryPreview id={it.storyId} src={it.src} label={it.title} />}
+            {it.node ? <div className="flex items-center justify-center bg-[var(--doc-stage,var(--muted))] p-4 transition-opacity duration-150 has-[[data-isolated=pending]]:opacity-0">{it.node}</div> : <StoryPreview id={it.storyId} src={it.src} label={it.title} />}
           </div>
           <figcaption className="mt-3 text-sm">
             <b>{it.title}</b>

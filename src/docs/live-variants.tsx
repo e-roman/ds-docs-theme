@@ -5,7 +5,7 @@ import { ExternalLink, Loader2, MousePointerClick } from "lucide-react"
 import { Button } from "../ui/button"
 import { Tabs, TabsList, TabsTrigger } from "../ui/tabs"
 import { fmt } from "./fmt"
-import { FRAME_CSS, closeInspection, openInspection } from "./inspector"
+import { frameCss, closeInspection, openInspection } from "./inspector"
 
 export type LiveItem = { label: string; id: string; /** Story embebida (mismo origen, vía /sb). */ src: string; /** Enlace a la story en Storybook. */ href: string; width?: number; /** Texto bajo la vista. */ caption?: string; /** Fondo oscuro. */ dark?: boolean; /** Modo «inline»: el componente real se dibuja directo en la caja, sin iframe (el proyecto lo entrega ya armado). */ node?: ReactNode }
 
@@ -44,7 +44,7 @@ function LiveFrame({ item, inspecting }: { item: LiveItem; inspecting: boolean }
     cleanup.current?.()
 
     const style = doc.createElement("style")
-    style.textContent = FRAME_CSS
+    style.textContent = frameCss()
     doc.head.appendChild(style)
 
     const root = doc.getElementById("storybook-root")
@@ -170,7 +170,7 @@ function LiveFrame({ item, inspecting }: { item: LiveItem; inspecting: boolean }
         onLoad={attach}
         scrolling="no"
         style={{ width: design, height, left: offset, transform: `scale(${scale})`, transformOrigin: "top left" }}
-        className={`absolute top-0 border-0 bg-muted transition-opacity duration-150 ${shown === item.id ? "opacity-100" : "opacity-0"}`}
+        className={`absolute top-0 border-0 bg-[var(--doc-stage,var(--muted))] transition-opacity duration-150 ${shown === item.id ? "opacity-100" : "opacity-0"}`}
       />
       {shown !== item.id && (
         <div aria-hidden className="absolute inset-0 grid place-items-center">
@@ -223,7 +223,7 @@ function InlineStage({ node, inspecting }: { node: ReactNode; inspecting: boolea
 /** Story en vivo sin inspector: para ejemplos «sí / no» y vistas sueltas. */
 export function StoryPreview({ id, src, label, width }: { id: string; src: string; label: string; width?: number }) {
   return (
-    <div className="bg-muted p-4">
+    <div className="bg-[var(--doc-stage,var(--muted))] p-4">
       <LiveFrame item={{ id, src, label, href: "", width }} inspecting={false} />
     </div>
   )
@@ -255,7 +255,7 @@ export function LiveVariants({ title, items }: { title: string; items: LiveItem[
             </Button>
           </div>
         </div>
-        <div className={`flex min-h-[260px] items-center p-6 ${cur.dark ? "bg-neutral-800" : "bg-muted"}`}>
+        <div className={`flex min-h-[260px] items-center p-6 ${cur.dark ? "bg-neutral-800" : "bg-[var(--doc-stage,var(--muted))]"}`}>
           {cur.node ? <InlineStage key={cur.id} node={cur.node} inspecting={inspecting} /> : <LiveFrame item={cur} inspecting={inspecting} />}
         </div>
       </div>

@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState, type ReactNode } from "react"
 import { Loader2 } from "lucide-react"
-import { FRAME_CSS, openInspection, useActiveKey } from "./inspector"
+import { frameCss, openInspection, useActiveKey } from "./inspector"
 import { queryDeep } from "../lib/dom"
 import type { Anatomy } from "../types"
 
@@ -117,7 +117,7 @@ function InlineAnatomy({ node, anatomy }: { node: ReactNode; anatomy: Anatomy })
   return (
     <>
       {/* la caja aparece junto con su contenido, ya con su tamaño final: no se ve crecer mientras la vista termina de montar */}
-      <div ref={box} className="relative flex min-h-[260px] items-center justify-center rounded-xl border bg-muted px-16 py-16 transition-opacity duration-150 has-[[data-isolated=pending]]:opacity-0">
+      <div ref={box} className="relative flex min-h-[260px] items-center justify-center rounded-xl border bg-[var(--doc-stage,var(--muted))] px-16 py-16 transition-opacity duration-150 has-[[data-isolated=pending]]:opacity-0">
         <div ref={root} className={`mx-auto flex justify-center ${anatomy.fill ? "w-full" : "w-fit"}`} style={{ maxWidth: anatomy.width ?? 480 }}>{node}</div>
         <MarkLayer marks={marks} anatomy={anatomy} uid={uid} active={active} onPick={inspectPart} />
       </div>
@@ -147,7 +147,7 @@ function FrameAnatomy({ title, src, anatomy }: { title: string; src: string; ana
     if (!el || !doc || !win || !doc.body) return
     cleanup.current?.()
     const style = doc.createElement("style")
-    style.textContent = FRAME_CSS
+    style.textContent = frameCss()
     doc.head.appendChild(style)
 
     const root = doc.getElementById("storybook-root")
@@ -232,7 +232,7 @@ function FrameAnatomy({ title, src, anatomy }: { title: string; src: string; ana
 
   return (
     <>
-      <div className="relative flex min-h-[260px] items-center justify-center rounded-xl border bg-muted px-16 py-16">
+      <div className="relative flex min-h-[260px] items-center justify-center rounded-xl border bg-[var(--doc-stage,var(--muted))] px-16 py-16">
         <iframe
           ref={frame}
           title={`Anatomía de ${title}`}
@@ -241,7 +241,7 @@ function FrameAnatomy({ title, src, anatomy }: { title: string; src: string; ana
           onLoad={attach}
           scrolling="no"
           style={{ height, maxWidth: anatomy.width ?? 480 }}
-          className={`mx-auto block w-full overflow-hidden border-0 bg-muted transition-opacity duration-150 ${ready ? "opacity-100" : "opacity-0"}`}
+          className={`mx-auto block w-full overflow-hidden border-0 bg-[var(--doc-stage,var(--muted))] transition-opacity duration-150 ${ready ? "opacity-100" : "opacity-0"}`}
         />
         {!ready && (
           <div aria-hidden className="absolute inset-0 grid place-items-center">
