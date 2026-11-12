@@ -53,7 +53,7 @@ const SECTIONS: { title: string; keys: GroupKey[] }[] = [
 
 /** Token que se copia como `var(--nombre)`. */
 function Chip({ name }: { name: string }) {
-  return <Copyable text={`var(--${name})`} className="rounded bg-muted px-1.5 py-0.5 font-mono text-xs hover:bg-accent">{name}</Copyable>
+  return <Copyable text={`var(--${name})`} className="rounded-sm bg-muted px-1.5 py-0.5 font-mono text-xs hover:bg-accent">{name}</Copyable>
 }
 
 /** Qué decir cuando no hay token: de dónde sale el valor en cada caso. */
@@ -64,30 +64,41 @@ function noTokenNote(r: Row): string {
   return "valor por defecto del navegador"
 }
 
+/** Primer color hexadecimal de un valor («1px #385dbe» → «#385dbe»), para mostrar la muestra. */
+const hexOf = (v: string) => v.match(/#[0-9a-fA-F]{3,8}\b/)?.[0]
+
+/**
+ * Una propiedad: nombre a la izquierda; a la derecha el valor (con muestra si es un color) y debajo,
+ * alineada a la izquierda, la cadena de tokens de la que sale.
+ */
 function RowView({ r }: { r: Row }) {
+  const hex = r.key === "fondo" || r.key === "texto" || r.key === "borde" ? hexOf(r.value) : undefined
   return (
-    <div className="space-y-1.5 border-t px-4 py-3 first:border-t-0">
-      <div className="flex items-baseline justify-between gap-3">
-        <span className="text-xs font-medium text-primary">{r.label}</span>
-        <span className="text-sm font-normal">{r.value}</span>
+    <div className="grid grid-cols-[4.75rem_minmax(0,1fr)] gap-x-3 border-t px-3.5 py-3 first:border-t-0">
+      <span className="pt-0.5 text-xs text-muted-foreground">{r.label}</span>
+      <div className="min-w-0 space-y-1.5">
+        <p className="flex items-center gap-2 text-sm font-medium">
+          {hex && <span aria-hidden className="size-3.5 shrink-0 rounded-sm border" style={{ background: hex }} />}
+          {r.value}
+        </p>
+        {r.chains.length === 0 ? (
+          <p className="text-xs text-muted-foreground">{noTokenNote(r)}</p>
+        ) : (
+          <div className="space-y-1">
+            {r.inherited && <p className="text-xs text-muted-foreground">heredado del contenedor</p>}
+            {r.chains.map((c, i) => (
+              <span key={i} className="flex flex-wrap items-center gap-1">
+                {c.map((n, j) => (
+                  <span key={n} className="flex items-center gap-1">
+                    {j > 0 && <span className="text-muted-foreground" aria-hidden>→</span>}
+                    <Chip name={n} />
+                  </span>
+                ))}
+              </span>
+            ))}
+          </div>
+        )}
       </div>
-      {r.chains.length === 0 ? (
-        <p className="text-xs text-muted-foreground">{noTokenNote(r)}</p>
-      ) : (
-        <div className="flex flex-col items-end gap-1">
-          {r.inherited && <p className="text-xs text-muted-foreground">heredado del contenedor</p>}
-          {r.chains.map((c, i) => (
-            <span key={i} className="flex flex-wrap items-center justify-end gap-1">
-              {c.map((n, j) => (
-                <span key={n} className="flex items-center gap-1">
-                  {j > 0 && <span className="text-muted-foreground" aria-hidden>→</span>}
-                  <Chip name={n} />
-                </span>
-              ))}
-            </span>
-          ))}
-        </div>
-      )}
     </div>
   )
 }
@@ -132,8 +143,8 @@ export function InspectDrawer() {
           const rows = data.rows.filter((r) => s.keys.includes(r.key))
           if (rows.length === 0) return null
           return (
-            <section key={s.title} className="overflow-hidden rounded-lg border">
-              <h3 className="bg-primary/5 px-4 py-2 text-sm font-semibold text-primary">{s.title}</h3>
+            <section key={s.title} className="overflow-hidden rounded-sm border">
+              <h3 className="bg-muted/60 px-3.5 py-2 text-xs font-semibold">{s.title}</h3>
               {rows.map((r) => <RowView key={r.key} r={r} />)}
             </section>
           )

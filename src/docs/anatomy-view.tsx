@@ -8,8 +8,11 @@ import type { Anatomy } from "../types"
 
 type Mark = { n: number; x: number; y: number; line: { left: number; top: number; width: number; height: number } }
 
-const GAP = 36
+/** Distancia del centro del número al borde del componente: el número (24 px) queda a 36 px de él. */
+const GAP = 48
 const SIZE = 24
+/** Grosor de la línea que une el número con su parte. */
+const LINE = 2
 
 /** Posición del número de una parte y su línea, a partir del rectángulo del elemento (relativo a la caja). */
 function markFor(p: Anatomy["parts"][number], left: number, top: number, width: number, height: number): Mark {
@@ -19,12 +22,12 @@ function markFor(p: Anatomy["parts"][number], left: number, top: number, width: 
     x = left + width * f
     const edge = p.side === "top" ? top : top + height
     y = p.side === "top" ? edge - GAP : edge + GAP
-    line = { left: x, top: Math.min(y, edge), width: 1, height: GAP }
+    line = { left: x - LINE / 2, top: Math.min(y, edge), width: LINE, height: GAP }
   } else {
     y = top + height * f
     const edge = p.side === "left" ? left : left + width
     x = p.side === "left" ? edge - GAP : edge + GAP
-    line = { left: Math.min(x, edge), top: y, width: GAP, height: 1 }
+    line = { left: Math.min(x, edge), top: y - LINE / 2, width: GAP, height: LINE }
   }
   return { n: p.n, x, y, line }
 }
