@@ -17,7 +17,17 @@ const INSPECT_CSS = `
  * `css` son las URL de las hojas de estilo del proyecto (compiladas aparte). Las variables CSS del documento (tokens) y las fuentes cargadas
  * en la página sí llegan adentro. Los hijos son componentes de React normales: mantienen sus eventos y su estado.
  */
-export function Isolated({ css, children, className }: { css: string[]; children: ReactNode; className?: string }) {
+export function Isolated({ css, children, className, external }: {
+  css: string[]
+  children?: ReactNode
+  className?: string
+  /**
+   * Monta una app externa (con su propio React, por ejemplo un paquete de vistas compilado aparte) dentro del shadow root.
+   * Recibe el contenedor y devuelve cómo desmontarla; puede ser asíncrona. La vista aparece cuando termina de montar.
+   * La caja contiene a sus hijos (`contain: layout paint`): un diálogo o drawer `position: fixed` queda dentro de ella y no cubre la página.
+   */
+  external?: (container: HTMLElement) => Promise<() => void> | (() => void)
+}) {
   const host = useRef<HTMLDivElement>(null)
   const [mount, setMount] = useState<HTMLElement | null>(null)
   const [ready, setReady] = useState(false)
@@ -28,7 +38,9 @@ export function Isolated({ css, children, className }: { css: string[]; children
     if (!el) return
     const root = el.shadowRoot ?? el.attachShadow({ mode: "open" })
     root.replaceChildren()
-    let pending = css.length
+    let pending = css.length + (external ? 1 : 0)
+    let off: (() => void) | undefined
+    let cancelled = false
     // se muestra cuando cargaron las hojas de estilo (con un tope por si alguna falla), para que no se vea sin estilo
     const done = () => { if (--pending <= 0) setReady(true) }
     if (pending === 0) setReady(true)
@@ -47,9 +59,18 @@ export function Isolated({ css, children, className }: { css: string[]; children
     div.setAttribute("data-isolated-root", "")
     root.appendChild(div)
     setMount(div)
+    if (external) {
+      Promise.resolve()
+        .then(() => external(div))
+        .then((stop) => { if (cancelled) stop(); else off = stop })
+        .catch((e) => console.error("Isolated: no se pudo montar la vista externa", e))
+        .finally(done)
+    }
     const timer = setTimeout(() => setReady(true), 3000)
     return () => {
       clearTimeout(timer)
+      cancelled = true
+      off?.()
       root.replaceChildren()
       setMount(null)
       setReady(false)
@@ -58,8 +79,8 @@ export function Isolated({ css, children, className }: { css: string[]; children
   }, [key])
 
   return (
-    <div ref={host} className={`w-full transition-opacity duration-150 ${ready ? "opacity-100" : "opacity-0"} ${className ?? ""}`}>
-      {mount && createPortal(children, mount)}
+    <div ref={host} className={`w-full transition-opacity duration-150 ${external ? "[contain:layout_paint]" : ""} ${ready ? "opacity-100" : "opacity-0"} ${className ?? ""}`}>
+      {mount && children !== undefined && createPortal(children, mount)}
     </div>
   )
 }

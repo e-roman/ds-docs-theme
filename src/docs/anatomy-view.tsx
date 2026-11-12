@@ -36,12 +36,12 @@ function markFor(p: Anatomy["parts"][number], left: number, top: number, width: 
 function MarkLayer({ marks, anatomy, uid, active, onPick }: { marks: Mark[]; anatomy: Anatomy; uid: string; active: string | null; onPick: (n: number) => void }) {
   return marks.map((m) => (
     <span key={m.n}>
-      <span aria-hidden className="absolute bg-foreground/50" style={m.line} />
+      <span aria-hidden className="absolute z-10 bg-foreground/50" style={m.line} />
       <button
         type="button"
         aria-label={`Ver propiedades: ${anatomy.parts.find((p) => p.n === m.n)?.label}`}
         onClick={() => onPick(m.n)}
-        className={`absolute flex cursor-pointer -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full text-xs font-bold text-background ${active === `${uid}:${m.n}` ? "bg-brand ring-4 ring-brand/30" : "bg-foreground"}`}
+        className={`absolute z-10 flex cursor-pointer -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full text-xs font-bold text-background ${active === `${uid}:${m.n}` ? "bg-brand ring-4 ring-brand/30" : "bg-foreground"}`}
         style={{ left: m.x, top: m.y, width: SIZE, height: SIZE }}
       >
         {m.n}
@@ -117,7 +117,7 @@ function InlineAnatomy({ node, anatomy }: { node: ReactNode; anatomy: Anatomy })
   return (
     <>
       <div ref={box} className="relative flex min-h-[260px] items-center justify-center rounded-xl border bg-muted px-16 py-16">
-        <div ref={root} className="mx-auto flex w-fit justify-center" style={{ maxWidth: anatomy.width ?? 480 }}>{node}</div>
+        <div ref={root} className={`mx-auto flex justify-center ${anatomy.fill ? "w-full" : "w-fit"}`} style={{ maxWidth: anatomy.width ?? 480 }}>{node}</div>
         <MarkLayer marks={marks} anatomy={anatomy} uid={uid} active={active} onPick={inspectPart} />
       </div>
       <Legend anatomy={anatomy} uid={uid} active={active} onPick={inspectPart} />

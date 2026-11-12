@@ -23,7 +23,7 @@ export type Prop = [name: string, type: string, desc: string, required?: boolean
 export type InspectGroup = "fondo" | "texto" | "borde" | "radio" | "padding" | "gap" | "alto" | "ancho" | "tipografia"
 export type AnatomyPart = { n: number; label: string; selector: string; /** Grupos de propiedades que muestra el inspector para esta parte (ej. un ícono: `["texto", "alto", "ancho"]`). Sin él, todos salvo el ancho. */ only?: InspectGroup[]; note?: string; side: "top" | "bottom" | "left" | "right"; pct?: number }
 /** Anatomía interactiva: una story de Storybook y sus partes. */
-export type Anatomy = { story: string; /** Ancho máximo del marco en px. */ width?: number; parts: AnatomyPart[]; /** Modo «inline»: el componente ya armado, sin iframe. Los `selector` de las partes se buscan dentro de él. */ node?: ReactNode }
+export type Anatomy = { story: string; /** La vista ocupa todo el ancho de la caja (diálogos y drawers `position: fixed`, que no tienen un ancho propio). */ fill?: boolean; /** Ancho máximo del marco en px. */ width?: number; parts: AnatomyPart[]; /** Modo «inline»: el componente ya armado, sin iframe. Los `selector` de las partes se buscan dentro de él. */ node?: ReactNode }
 /** `width`: ancho máximo del marco en px; las stories mobile se muestran en un marco angosto. */
 export type Story = { label: string; id: string; width?: number; /** Texto bajo la vista: cuándo usar esa variante. */ caption?: string; /** Fondo oscuro: para vistas pensadas para fotos o superficies oscuras. */ dark?: boolean; /** Modo «inline»: el componente ya armado, se dibuja sin iframe. */ node?: ReactNode }
 /** Vistas agrupadas por una propiedad (Variante, Tamaño, Estado…): cada grupo es un bloque con sus pestañas. */
