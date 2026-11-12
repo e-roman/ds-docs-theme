@@ -17,7 +17,9 @@ const INSPECT_CSS = `
  */
 async function settle(root: ShadowRoot, cap = 2500) {
   const work = (async () => {
-    await new Promise((r) => setTimeout(r, 50)) // React termina de montar
+    // React termina de montar: se espera a que haya contenido (con la máquina cargada tarda más que un instante)
+    for (let i = 0; i < 100 && !root.querySelector("[data-isolated-root]")?.firstElementChild; i++) await new Promise((r) => setTimeout(r, 30))
+    await new Promise((r) => setTimeout(r, 30))
     await new Promise((r) => requestAnimationFrame(() => r(null))) // el diseño pide las fuentes que usa
     await document.fonts.ready
     const pending = Array.from(root.querySelectorAll("img")).filter((i) => !i.complete)

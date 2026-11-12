@@ -246,7 +246,8 @@ export function LiveVariants({ title, items }: { title: string; items: LiveItem[
               </TabsList>
             </Tabs>
           ) : (
-            <span className="text-sm font-medium">{cur.label}</span>
+            // un grupo con una sola vista ya tiene su título arriba: no se repite
+            cur.label !== title ? <span className="text-sm font-medium">{cur.label}</span> : <span aria-hidden />
           )}
           <div className="flex items-center gap-2">
             <Button variant={inspecting ? "default" : "outline"} size="sm" aria-pressed={inspecting} onClick={() => { setInspecting(!inspecting); closeInspection() }}>
@@ -255,7 +256,7 @@ export function LiveVariants({ title, items }: { title: string; items: LiveItem[
           </div>
         </div>
         <div className={`flex min-h-[260px] items-center p-6 ${cur.dark ? "bg-neutral-800" : "bg-muted"}`}>
-          {cur.node ? <InlineStage node={cur.node} inspecting={inspecting} /> : <LiveFrame item={cur} inspecting={inspecting} />}
+          {cur.node ? <InlineStage key={cur.id} node={cur.node} inspecting={inspecting} /> : <LiveFrame item={cur} inspecting={inspecting} />}
         </div>
       </div>
       <div className="mt-2 flex items-start justify-between gap-4">
