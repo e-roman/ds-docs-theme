@@ -237,7 +237,7 @@ export function LiveVariants({ title, items }: { title: string; items: LiveItem[
 
   return (
     <>
-      <div className="overflow-hidden rounded-xl border bg-card">
+      <div className="overflow-hidden rounded-xl border bg-card transition-opacity duration-150 has-[[data-isolated=pending]]:opacity-0">
         <div className="flex flex-wrap items-center justify-between gap-3 border-b bg-muted/40 px-4 py-3">
           {items.length > 1 ? (
             <Tabs value={value} onValueChange={(v) => { setValue(String(v)); closeInspection() }}>

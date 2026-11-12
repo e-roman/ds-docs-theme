@@ -12,6 +12,22 @@ const INSPECT_CSS = `
 `
 
 /**
+ * Espera a que lleguen las fuentes y las imágenes de lo que se acaba de montar (con un tope), para que la vista no cambie
+ * de tamaño después de mostrarse: sin esto aparece con la letra del navegador o sin la foto y luego «se agranda».
+ */
+async function settle(root: ShadowRoot, cap = 2500) {
+  const work = (async () => {
+    await new Promise((r) => setTimeout(r, 50)) // React termina de montar
+    await new Promise((r) => requestAnimationFrame(() => r(null))) // el diseño pide las fuentes que usa
+    await document.fonts.ready
+    const pending = Array.from(root.querySelectorAll("img")).filter((i) => !i.complete)
+    await Promise.all(pending.map((i) => new Promise((r) => { i.addEventListener("load", r, { once: true }); i.addEventListener("error", r, { once: true }) })))
+    await document.fonts.ready
+  })()
+  await Promise.race([work, new Promise((r) => setTimeout(r, cap))])
+}
+
+/**
  * Dibuja `children` dentro de un shadow root con su propio CSS: los estilos del proyecto (por ejemplo, los de su tienda) no pisan a los del theme
  * ni al revés. Es el modo «aislado» del modo inline: tan rápido como renderizar directo, sin el peso de un iframe.
  * `css` son las URL de las hojas de estilo del proyecto (compiladas aparte). Las variables CSS del documento (tokens) y las fuentes cargadas
@@ -62,7 +78,7 @@ export function Isolated({ css, children, className, external }: {
     if (external) {
       Promise.resolve()
         .then(() => external(div))
-        .then((stop) => { if (cancelled) stop(); else off = stop })
+        .then(async (stop) => { if (cancelled) { stop(); return } off = stop; await settle(root) })
         .catch((e) => console.error("Isolated: no se pudo montar la vista externa", e))
         .finally(done)
     }
@@ -79,7 +95,7 @@ export function Isolated({ css, children, className, external }: {
   }, [key])
 
   return (
-    <div ref={host} className={`w-full transition-opacity duration-150 ${external ? "[contain:layout_paint]" : ""} ${ready ? "opacity-100" : "opacity-0"} ${className ?? ""}`}>
+    <div ref={host} data-isolated={ready ? "ready" : "pending"} className={`w-full transition-opacity duration-150 ${external ? "[contain:layout_paint]" : ""} ${ready ? "opacity-100" : "opacity-0"} ${className ?? ""}`}>
       {mount && children !== undefined && createPortal(children, mount)}
     </div>
   )

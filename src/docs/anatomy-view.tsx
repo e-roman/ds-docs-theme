@@ -116,7 +116,8 @@ function InlineAnatomy({ node, anatomy }: { node: ReactNode; anatomy: Anatomy })
 
   return (
     <>
-      <div ref={box} className="relative flex min-h-[260px] items-center justify-center rounded-xl border bg-muted px-16 py-16">
+      {/* la caja aparece junto con su contenido, ya con su tamaño final: no se ve crecer mientras la vista termina de montar */}
+      <div ref={box} className="relative flex min-h-[260px] items-center justify-center rounded-xl border bg-muted px-16 py-16 transition-opacity duration-150 has-[[data-isolated=pending]]:opacity-0">
         <div ref={root} className={`mx-auto flex justify-center ${anatomy.fill ? "w-full" : "w-fit"}`} style={{ maxWidth: anatomy.width ?? 480 }}>{node}</div>
         <MarkLayer marks={marks} anatomy={anatomy} uid={uid} active={active} onPick={inspectPart} />
       </div>
