@@ -59,7 +59,7 @@ export function SectionIndex({ title, intro, base, group, items }: { title: stri
     <PageContainer>
       <h1 className="text-4xl font-bold tracking-tight">{title}</h1>
       <p className="mt-3 max-w-2xl text-lg text-muted-foreground">{intro}</p>
-      <ul className="mt-10 grid gap-x-6 gap-y-8 sm:grid-cols-2 lg:grid-cols-3">
+      <ul className="mt-10 grid gap-x-6 gap-y-8 sm:grid-cols-2 lg:grid-cols-4">
         {items.map((i, n) => (
           <li key={i.slug} className="contents">
             {i.cat && i.cat !== items[n - 1]?.cat && <h2 className="col-span-full text-xl font-semibold">{i.cat}</h2>}
